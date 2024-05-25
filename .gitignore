@@ -17,6 +17,8 @@ target/
 logs/
 *.log
 
+swagger-ui/
+
 .apt_generated
 .classpath
 .factorypath

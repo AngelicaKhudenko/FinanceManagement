@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageCurrencyDTO {
+public class PageCategoryDTO {
 
     private Integer number;
     private Integer size;
@@ -22,5 +22,5 @@ public class PageCurrencyDTO {
     @JsonProperty("number_of_elements")
     private Integer numberOfElements;
     private boolean last;
-    private List<CurrencyDTO> content;
+    private List<CategoryDTO> content;
 }

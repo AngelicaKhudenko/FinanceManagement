@@ -9,14 +9,12 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrencyCUDTO {
+public class CategoryCUDTO {
 
     private String title;
-    private String description;
 
     public boolean fieldsChanged() {
 
-        return Objects.nonNull(title) &&
-                Objects.nonNull(description);
+        return Objects.nonNull(title);
     }
 }

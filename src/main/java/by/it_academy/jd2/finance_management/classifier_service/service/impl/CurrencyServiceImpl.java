@@ -5,6 +5,8 @@ import by.it_academy.jd2.finance_management.classifier_service.model.CurrencyEnt
 import by.it_academy.jd2.finance_management.classifier_service.repository.ICurrencyRepository;
 import by.it_academy.jd2.finance_management.classifier_service.service.api.ICurrencyService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,4 +43,12 @@ public class CurrencyServiceImpl implements ICurrencyService {
 
         this.currencyRepository.saveAndFlush(entity);
     }
+
+    @Override
+    public Page<CurrencyEntity> get(Pageable pageable) {
+
+        return this.currencyRepository.findAll(pageable);
+    }
+
+
 }

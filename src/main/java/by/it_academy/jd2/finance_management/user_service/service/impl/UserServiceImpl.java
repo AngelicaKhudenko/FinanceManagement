@@ -51,6 +51,7 @@ public class UserServiceImpl implements IUserService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
+        entity.setUpdate(creation);
 
         this.userRepository.saveAndFlush(entity);
     }
@@ -69,6 +70,7 @@ public class UserServiceImpl implements IUserService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
+        entity.setUpdate(creation);
 
         this.userRepository.saveAndFlush(entity);
     }

@@ -50,6 +50,7 @@ public class ClassifierServiceImpl implements IClassifierService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
+        entity.setUpdate(creation);
 
         this.currencyRepository.saveAndFlush(entity);
     }
@@ -68,6 +69,7 @@ public class ClassifierServiceImpl implements IClassifierService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
+        entity.setUpdate(creation);
 
         this.categoryRepository.saveAndFlush(entity);
 

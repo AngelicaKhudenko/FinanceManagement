@@ -23,7 +23,11 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(UUID uuid, LocalDateTime creation, LocalDateTime update, String title) {
+    public CategoryEntity(UUID uuid,
+                          LocalDateTime creation,
+                          LocalDateTime update,
+                          String title) {
+
         this.uuid = uuid;
         this.creation = creation;
         this.update = update;

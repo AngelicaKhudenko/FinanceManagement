@@ -1,5 +1,6 @@
-package by.it_academy.jd2.finance_management.classifier_service.model;
+package by.it_academy.jd2.finance_management.account_service.model;
 
+import by.it_academy.jd2.finance_management.account_service.core.enums.EAccountType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,8 +10,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name="currency",schema = "app")
-public class CurrencyEntity {
+@Table(name="account",schema = "app")
+public class AccountEntity {
     @Id
     @Column(name = "id")
     private UUID uuid;
@@ -20,20 +21,30 @@ public class CurrencyEntity {
     private LocalDateTime update;
     private String title;
     private String description;
+    private double balance;
+    private EAccountType type;
+    private UUID currency;
 
-    public CurrencyEntity() {
+    public AccountEntity() {
     }
 
-    public CurrencyEntity(UUID uuid,
-                          LocalDateTime creation,
-                          LocalDateTime update,
-                          String title,
-                          String description) {
+    public AccountEntity(UUID uuid,
+                         LocalDateTime creation,
+                         LocalDateTime update,
+                         String title,
+                         String description,
+                         double balance,
+                         EAccountType type,
+                         UUID currency) {
+
         this.uuid = uuid;
         this.creation = creation;
         this.update = update;
         this.title = title;
         this.description = description;
+        this.balance = balance;
+        this.type = type;
+        this.currency = currency;
     }
 
     public UUID getUuid() {
@@ -74,5 +85,29 @@ public class CurrencyEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public EAccountType getType() {
+        return type;
+    }
+
+    public void setType(EAccountType type) {
+        this.type = type;
+    }
+
+    public UUID getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(UUID currency) {
+        this.currency = currency;
     }
 }

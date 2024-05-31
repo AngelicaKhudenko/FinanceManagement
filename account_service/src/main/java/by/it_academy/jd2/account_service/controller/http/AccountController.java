@@ -28,20 +28,18 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody AccountCUDTO account) {
 
-        this.accountService.createOperation(account);
+        this.accountService.create(account);
     }
 
     @GetMapping(value = "/{uuid}")
-    @ResponseStatus(HttpStatus.OK)
     public AccountDTO getById(@PathVariable(value = "uuid") UUID uuid) {
 
-        AccountEntity entity = this.accountService.getOperation(uuid);
+        AccountEntity entity = this.accountService.get(uuid);
 
         return this.entityAccountDTOConverter.convert(entity);
     }
 
     @PutMapping(value = "/{uuid}/dt_update/{dt_update}")
-    @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable(value = "uuid") UUID uuid,
                        @PathVariable(value = "dt_update") Long updateDate,
                        @RequestBody AccountCUDTO account) {

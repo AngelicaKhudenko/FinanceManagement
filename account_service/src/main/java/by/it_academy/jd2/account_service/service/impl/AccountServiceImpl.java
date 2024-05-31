@@ -1,15 +1,11 @@
 package by.it_academy.jd2.account_service.service.impl;
 
-import by.it_academy.jd2.account_service.core.dto.OperationCUDTO;
 import by.it_academy.jd2.account_service.model.AccountEntity;
-import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +19,19 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AccountServiceImpl implements IAccountService {
 
-    private final Converter<AccountCUDTO, AccountEntity> creationAccountConverter;
+    private final Converter<AccountCUDTO, AccountEntity> creationConverter;
     private final IAccountRepository accountRepository;
 
-    public AccountServiceImpl(Converter<AccountCUDTO, AccountEntity> creationAccountConverter,
+    public AccountServiceImpl(Converter<AccountCUDTO, AccountEntity> creationConverter,
                               IAccountRepository accountRepository) {
 
-        this.creationAccountConverter = creationAccountConverter;
+        this.creationConverter = creationConverter;
         this.accountRepository = accountRepository;
     }
 
     @Transactional
     @Override
-    public void createOperation(AccountCUDTO account) {
+    public void create(AccountCUDTO account) {
 
         if (!account.fieldsChanged()) {
             throw new IllegalArgumentException("Отсутствует достаточно данных о счете");
@@ -45,7 +41,7 @@ public class AccountServiceImpl implements IAccountService {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
-        AccountEntity entity = this.creationAccountConverter.convert(account);
+        AccountEntity entity = this.creationConverter.convert(account);
 
         entity.setUuid(UUID.randomUUID());
 
@@ -111,17 +107,5 @@ public class AccountServiceImpl implements IAccountService {
         entity.setUpdate(LocalDateTime.now());
 
         this.accountRepository.saveAndFlush(entity);
-    }
-
-    @Override
-    public void createOperation(UUID uuid, OperationCUDTO operation) {
-
-
-    }
-
-    @Override
-    public Page<OperationEntity> getOperation(Pageable pageable) {
-
-        return this.operationRepository.findAll(pageable);
     }
 }

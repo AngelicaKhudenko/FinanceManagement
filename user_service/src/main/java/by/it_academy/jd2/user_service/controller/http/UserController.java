@@ -38,7 +38,6 @@ public class UserController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public PageUserDTO get(@RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
@@ -52,7 +51,6 @@ public class UserController {
     }
 
     @GetMapping(value = "/{uuid}")
-    @ResponseStatus(HttpStatus.OK)
     public UserDTO getById(@PathVariable(value = "uuid") UUID uuid) {
 
         UserEntity entity = this.userService.get(uuid);
@@ -61,7 +59,6 @@ public class UserController {
     }
 
     @PutMapping(value = "/{uuid}/dt_update/{dt_update}")
-    @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable(value = "uuid") UUID uuid,
                        @PathVariable(value = "dt_update") Long updateDate,
                        @RequestBody UserCUDTO user) {

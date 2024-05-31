@@ -15,12 +15,12 @@ public class OperationEntity {
     @Id
     @Column(name = "id")
     private UUID uuid;
+    private UUID account;
     @Column(name = "dt_create")
     private LocalDateTime creation;
     @Column(name = "dt_update")
     private LocalDateTime update;
     private LocalDateTime date;
-
     private String description;
     private UUID category;
     private Double value;
@@ -29,7 +29,7 @@ public class OperationEntity {
     public OperationEntity() {
     }
 
-    public OperationEntity(UUID uuid,
+    public OperationEntity(UUID uuid, UUID account,
                            LocalDateTime creation,
                            LocalDateTime update,
                            LocalDateTime date,
@@ -39,6 +39,7 @@ public class OperationEntity {
                            UUID currency) {
 
         this.uuid = uuid;
+        this.account = account;
         this.creation = creation;
         this.update = update;
         this.date = date;
@@ -54,6 +55,14 @@ public class OperationEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public UUID getAccount() {
+        return account;
+    }
+
+    public void setAccount(UUID account) {
+        this.account = account;
     }
 
     public LocalDateTime getCreation() {

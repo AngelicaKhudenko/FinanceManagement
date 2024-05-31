@@ -1,11 +1,9 @@
 package by.it_academy.jd2.user_service.service.impl;
 
-import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
 import by.it_academy.jd2.user_service.repository.IUserRepository;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
-import by.it_academy.jd2.user_service.core.dto.UserRegistrationDTO;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
@@ -24,14 +22,13 @@ import java.util.UUID;
 public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final Converter<UserCUDTO, UserEntity> creationConverter;
-    private final Converter<UserRegistrationDTO, UserEntity> registrationConverter;
+
 
     public UserServiceImpl(IUserRepository userRepository,
-                           Converter<UserCUDTO, UserEntity> creationConverter, Converter<UserRegistrationDTO, UserEntity> registrationConverter) {
+                           Converter<UserCUDTO, UserEntity> creationConverter) {
 
         this.userRepository = userRepository;
         this.creationConverter = creationConverter;
-        this.registrationConverter = registrationConverter;
     }
 
     @Transactional
@@ -46,38 +43,13 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
-        UserEntity entityDB = this.userRepository.findByMail(user.getMail());
+        Optional<UserEntity> optional = getByMail(user.getMail());
 
-        if (entityDB != null) {
+        if (optional.isPresent()) {
             throw new IllegalArgumentException("Пользователь с таким адресом электронной почты уже существует");
         }
 
         UserEntity entity = this.creationConverter.convert(user);
-
-        entity.setUuid(UUID.randomUUID());
-
-        LocalDateTime creation = LocalDateTime.now();
-        entity.setCreation(creation);
-        entity.setUpdate(creation);
-
-        this.userRepository.saveAndFlush(entity);
-    }
-
-    @Transactional
-    @Override
-    public void create(UserRegistrationDTO user) {
-
-        if (!user.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
-        }
-
-        UserEntity entityDB = this.userRepository.findByMail(user.getMail());
-
-        if (entityDB != null) {
-            throw new IllegalArgumentException("Пользователь с таким адресом электронной почты уже существует");
-        }
-
-        UserEntity entity = this.registrationConverter.convert(user);
 
         entity.setUuid(UUID.randomUUID());
 
@@ -153,23 +125,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void login(UserLoginDTO user) {
+    public Optional<UserEntity> getByMail (String mail) {
 
-        if (!user.fieldsChanged()) {
-            throw new IllegalArgumentException("Не переданы параметры для входа");
+        if (mail == null || mail.isBlank()) {
+            throw new IllegalStateException("Переданный адрес электронной почты пуст");
         }
-
-        String mail = user.getMail();
-        String password = user.getPassword();
 
         UserEntity entity = this.userRepository.findByMail(mail);
 
-        if (entity == null) {
-            throw new IllegalArgumentException("Пользователь с указанной почтой отсутствует");
-        }
-
-        if (!entity.getPassword().equals(password)){
-            throw new IllegalArgumentException("Неверный пароль");
-        }
+        return Optional.ofNullable(entity);
     }
 }

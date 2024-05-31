@@ -9,7 +9,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegistrationDTO {
+public class UserRegistrationCUDTO {
     private String mail;
     private String fio;
     private String password;

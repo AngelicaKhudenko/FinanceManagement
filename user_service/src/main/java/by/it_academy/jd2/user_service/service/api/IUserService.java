@@ -2,6 +2,7 @@ package by.it_academy.jd2.user_service.service.api;
 
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
+import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,6 @@ public interface IUserService {
     void update(UUID uuid, Long updateDate, UserCUDTO user);
     void update(UserEntity entity);
     Optional<UserEntity> getByMail(String mail);
+
+    UserDetailsExpanded getDetails();
 }

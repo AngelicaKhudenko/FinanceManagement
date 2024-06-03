@@ -10,6 +10,7 @@ import by.it_academy.jd2.user_service.repository.IVerificationRepository;
 import by.it_academy.jd2.user_service.service.api.ICabinetService;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
+import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,7 @@ public class CabinetServiceImpl implements ICabinetService{
         this.mailService.create(mail);
     }
 
+    @Transactional
     @Override
     public void verify(VerificationDTO verificationDTO) {
 
@@ -130,6 +132,14 @@ public class CabinetServiceImpl implements ICabinetService{
         }
 
         return jwtHandler.generateAccessToken(entity);
+    }
+
+    @Override
+    public UserEntity getInfoAboutMe() {
+
+        UserDetailsExpanded details = this.userService.getDetails();
+
+        return this.userService.get(details.getUUID());
     }
 
     private String generateVerificationCode() {

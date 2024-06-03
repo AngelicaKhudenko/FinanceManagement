@@ -20,23 +20,23 @@ public class JwtTokenHandler {
     }
 
     public String generateAccessToken(UserEntity user) {
-        return generateAccessToken(user.getFio(),user.getUuid(),user.getRole());
+
+        return generateAccessToken(user.getUuid(),user.getRole());
     }
 
-    public String generateAccessToken(String name, UUID uuid, EUserRole role) {
+    public String generateAccessToken(UUID uuid, EUserRole role) {
 
         return Jwts.builder()
-                .setSubject(name)
+                .setSubject(uuid.toString())
                 .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
                 .claim("role", role.name())
-                .claim("uuid",uuid.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)))
                 .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
     }
 
-    public String getName(String token) {
+    public String getUUID(String token) {
 
         Claims claims = Jwts.parser()
                 .setSigningKey(property.getSecret())
@@ -65,17 +65,6 @@ public class JwtTokenHandler {
 
         return (String) claims.get("role");
     }
-
-    public String getUUID(String token) {
-
-        Claims claims = Jwts.parser()
-                .setSigningKey(property.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-
-        return (String) claims.get("uuid");
-    }
-
 
     public boolean validate(String token) {
 

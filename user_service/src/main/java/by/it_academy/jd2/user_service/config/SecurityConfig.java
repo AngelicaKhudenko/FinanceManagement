@@ -44,12 +44,12 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers("/api/v1//users/**").hasAnyRole("ADMIN")
-                .requestMatchers("/api/v1//cabinet/me").authenticated()
+                .requestMatchers("/api/v1/users/**").hasAnyRole("ADMIN")
+                .requestMatchers("/api/v1/cabinet/me").authenticated()
 
                 .requestMatchers("/api/v1/cabinet/registration").permitAll()
-                .requestMatchers("/api/v1//cabinet/verification").permitAll()
-                .requestMatchers("/api/v1//cabinet/login").permitAll()
+                .requestMatchers("/api/v1/cabinet/verification").permitAll()
+                .requestMatchers("/api/v1/cabinet/login").permitAll()
 
                 .anyRequest().authenticated()
         );

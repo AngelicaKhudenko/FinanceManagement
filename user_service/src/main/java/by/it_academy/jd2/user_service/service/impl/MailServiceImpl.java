@@ -22,7 +22,6 @@ public class MailServiceImpl implements IMailService {
 
     private final JavaMailSender javaMailSender;
     private final IMailRepository mailRepository;
-
     private final Converter<MailDTO, MailEntity> converter;
 
     public MailServiceImpl(JavaMailSender javaMailSender,

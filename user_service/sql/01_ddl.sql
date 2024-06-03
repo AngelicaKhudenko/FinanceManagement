@@ -11,15 +11,13 @@ CREATE TABLE app.users
     role character varying,
     status character varying,
     password character varying,
-    version bigint,
     CONSTRAINT users_id_pk PRIMARY KEY (id),
     CONSTRAINT users_dt_create_not_null CHECK (dt_create IS NOT NULL),
     CONSTRAINT users_mail_not_null CHECK (mail IS NOT NULL),
     CONSTRAINT users_fio_not_null CHECK (fio IS NOT NULL),
     CONSTRAINT users_role_not_null CHECK (role IS NOT NULL),
     CONSTRAINT users_status_not_null CHECK (status IS NOT NULL),
-    CONSTRAINT users_password_not_null CHECK (password IS NOT NULL),
-    CONSTRAINT users_version_not_null CHECK (version IS NOT NULL)
+    CONSTRAINT users_password_not_null CHECK (password IS NOT NULL)
 );
 
 ALTER TABLE IF EXISTS app.users
@@ -44,4 +42,14 @@ CREATE TABLE app.mails
 );
 
 ALTER TABLE IF EXISTS app.mails
+    OWNER to user_service_app;
+
+CREATE TABLE app.verification
+(
+    mail character varying NOT NULL,
+    code character varying,
+    CONSTRAINT verification_code_not_null CHECK (code IS NOT NULL)
+);
+
+ALTER TABLE IF EXISTS app.verification
     OWNER to user_service_app;

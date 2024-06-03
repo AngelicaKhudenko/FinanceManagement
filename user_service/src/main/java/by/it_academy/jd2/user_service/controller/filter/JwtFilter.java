@@ -1,6 +1,7 @@
 package by.it_academy.jd2.user_service.controller.filter;
 
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
+import by.it_academy.jd2.user_service.token.UserDetailsServiceExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,10 +23,10 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserDetailsManager userManager;
+    private final UserDetailsServiceExpanded userManager;
     private final JwtTokenHandler jwtHandler;
 
-    public JwtFilter(UserDetailsManager userManager, JwtTokenHandler jwtHandler) {
+    public JwtFilter(UserDetailsServiceExpanded userManager, JwtTokenHandler jwtHandler) {
         this.userManager = userManager;
         this.jwtHandler = jwtHandler;
     }
@@ -53,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         UserDetails userDetails = userManager
-                .loadUserByUsername(jwtHandler.getName(token));
+                .loadUserByUsername(jwtHandler.getUUID(token));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

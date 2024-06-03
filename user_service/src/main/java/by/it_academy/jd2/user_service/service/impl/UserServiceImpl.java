@@ -2,12 +2,15 @@ package by.it_academy.jd2.user_service.service.impl;
 
 import by.it_academy.jd2.user_service.repository.IUserRepository;
 import by.it_academy.jd2.user_service.model.UserEntity;
+import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
+import by.it_academy.jd2.user_service.token.UserHolderService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +25,17 @@ import java.util.UUID;
 public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final Converter<UserCUDTO, UserEntity> creationConverter;
-
+    private final PasswordEncoder encoder;
+    private final UserHolderService userHolderService;
 
     public UserServiceImpl(IUserRepository userRepository,
-                           Converter<UserCUDTO, UserEntity> creationConverter) {
+                           Converter<UserCUDTO, UserEntity> creationConverter, PasswordEncoder encoder,
+                           UserHolderService userHolderService) {
 
         this.userRepository = userRepository;
         this.creationConverter = creationConverter;
+        this.encoder = encoder;
+        this.userHolderService = userHolderService;
     }
 
     @Transactional
@@ -56,6 +63,8 @@ public class UserServiceImpl implements IUserService {
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
         entity.setUpdate(creation);
+
+        entity.setPassword(this.encoder.encode(user.getPassword()));
 
         this.userRepository.saveAndFlush(entity);
     }
@@ -155,5 +164,11 @@ public class UserServiceImpl implements IUserService {
         UserEntity entity = this.userRepository.findByMail(mail);
 
         return Optional.ofNullable(entity);
+    }
+
+    @Override
+    public UserDetailsExpanded getDetails() {
+
+        return this.userHolderService.getUser();
     }
 }

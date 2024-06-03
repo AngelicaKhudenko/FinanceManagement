@@ -48,4 +48,12 @@ public class CabinetController {
 
         return this.cabinetService.login(user);
     }
+
+    @GetMapping(value = "/me")
+    public UserDTO getInfoAboutMe() {
+
+        UserEntity entity = this.cabinetService.getInfoAboutMe();
+
+        return this.converter.convert(entity);
+    }
 }

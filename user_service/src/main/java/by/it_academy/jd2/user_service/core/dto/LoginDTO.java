@@ -9,7 +9,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDTO {
+public class LoginDTO {
 
     private String mail;
     private String password;

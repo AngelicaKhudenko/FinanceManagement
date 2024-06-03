@@ -1,6 +1,5 @@
 package by.it_academy.jd2.account_service.core.enums;
 
-import by.it_academy.jd2.finance_management.user_service.core.enums.EUserRole;
 
 import java.util.Optional;
 

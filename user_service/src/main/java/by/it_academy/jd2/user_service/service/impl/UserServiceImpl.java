@@ -124,6 +124,27 @@ public class UserServiceImpl implements IUserService {
         this.userRepository.saveAndFlush(entity);
     }
 
+    @Transactional
+    @Override
+    public void update(UserEntity entity) {
+
+        Optional<UserEntity> optional = this.userRepository.findById(entity.getUuid());
+
+        if (optional.isEmpty()) {
+            throw new IllegalStateException("Пользователь с таким id не зарегистрирвоан");
+        }
+
+        UserEntity entityDB = optional.get();
+
+        if (!entityDB.getUpdate().equals(entity.getUpdate())) {
+            throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
+        }
+
+        entity.setUpdate(LocalDateTime.now());
+
+        this.userRepository.saveAndFlush(entity);
+    }
+
     @Override
     public Optional<UserEntity> getByMail (String mail) {
 

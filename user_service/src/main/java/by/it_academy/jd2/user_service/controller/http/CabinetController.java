@@ -1,6 +1,7 @@
 package by.it_academy.jd2.user_service.controller.http;
 
-import by.it_academy.jd2.user_service.core.dto.UserLoginDTO;
+import by.it_academy.jd2.user_service.core.dto.LoginDTO;
+import by.it_academy.jd2.user_service.core.dto.VerificationDTO;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.dto.UserRegistrationCUDTO;
@@ -29,9 +30,22 @@ public class CabinetController {
         this.cabinetService.create(user);
     }
 
-    @PostMapping(value = "/login")
-    public void login(@RequestBody UserLoginDTO user) {
+    @GetMapping(value = "/verification")
+    public void verify(@RequestParam(value = "code") String code,
+                       @RequestParam(value = "mail") String mail) {
 
-        this.cabinetService.login(user);
+        VerificationDTO verificationDTO = VerificationDTO
+                .builder()
+                .code(code)
+                .mail(mail)
+                .build();
+
+        this.cabinetService.verify(verificationDTO);
+    }
+
+    @PostMapping(value = "/login")
+    public String login(@RequestBody LoginDTO user) {
+
+        return this.cabinetService.login(user);
     }
 }

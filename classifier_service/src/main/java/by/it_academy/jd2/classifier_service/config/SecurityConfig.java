@@ -1,11 +1,10 @@
-package by.it_academy.jd2.user_service.config;
+package by.it_academy.jd2.classifier_service.config;
 
 
-import by.it_academy.jd2.user_service.controller.filter.JwtFilter;
+import by.it_academy.jd2.classifier_service.controller.filter.JwtFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -45,11 +44,10 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers(HttpMethod.GET,"/api/v1/classifier/currency",
-                        "/api/v1/classifier/operation/category").permitAll()
+                .requestMatchers("/api/v1/users/**").hasAnyRole("ADMIN")
+                .requestMatchers("/api/v1/cabinet/me").authenticated()
 
-                .requestMatchers(HttpMethod.POST,"/api/v1/classifier/currency",
-                        "/api/v1/classifier/operation/category").hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER")
+                .requestMatchers("/api/v1/cabinet/registration", "/api/v1/cabinet/verification","/api/v1/cabinet/login").permitAll()
 
                 .anyRequest().authenticated()
         );

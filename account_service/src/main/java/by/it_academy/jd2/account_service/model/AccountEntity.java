@@ -15,6 +15,7 @@ public class AccountEntity {
     @Id
     @Column(name = "id")
     private UUID uuid;
+    private UUID user;
     @Column(name = "dt_create")
     private LocalDateTime creation;
     @Column(name = "dt_update")
@@ -29,6 +30,7 @@ public class AccountEntity {
     }
 
     public AccountEntity(UUID uuid,
+                         UUID user,
                          LocalDateTime creation,
                          LocalDateTime update,
                          String title,
@@ -38,6 +40,7 @@ public class AccountEntity {
                          UUID currency) {
 
         this.uuid = uuid;
+        this.user = user;
         this.creation = creation;
         this.update = update;
         this.title = title;
@@ -53,6 +56,14 @@ public class AccountEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public UUID getUser() {
+        return user;
+    }
+
+    public void setUser(UUID user) {
+        this.user = user;
     }
 
     public LocalDateTime getCreation() {

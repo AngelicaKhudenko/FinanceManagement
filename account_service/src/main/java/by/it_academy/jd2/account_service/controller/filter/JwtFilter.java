@@ -1,7 +1,7 @@
-package by.it_academy.jd2.classifier_service.controller.filter;
+package by.it_academy.jd2.account_service.controller.filter;
 
-import by.it_academy.jd2.classifier_service.controller.utils.JwtTokenHandler;
-import by.it_academy.jd2.classifier_service.token.UserDetailsExpanded;
+import by.it_academy.jd2.account_service.controller.utils.JwtTokenHandler;
+import by.it_academy.jd2.account_service.token.UserDetailsExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

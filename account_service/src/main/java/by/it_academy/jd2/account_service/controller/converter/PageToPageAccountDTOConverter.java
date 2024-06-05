@@ -1,18 +1,18 @@
 package by.it_academy.jd2.account_service.controller.converter;
 
-import by.it_academy.jd2.account_service.core.dto.OperationDTO;
-import by.it_academy.jd2.account_service.core.dto.PageOperationDTO;
+import by.it_academy.jd2.account_service.core.dto.AccountDTO;
+import by.it_academy.jd2.account_service.core.dto.PageAccountDTO;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PageToPageOperationDTOConverter implements Converter<Page<OperationDTO>, PageOperationDTO> {
+public class PageToPageAccountDTOConverter implements Converter<Page<AccountDTO>, PageAccountDTO> {
 
     @Override
-    public PageOperationDTO convert(Page<OperationDTO> page) {
+    public PageAccountDTO convert(Page<AccountDTO> page) {
 
-        PageOperationDTO pageDTO = new PageOperationDTO();
+        PageAccountDTO pageDTO = new PageAccountDTO();
 
         pageDTO.setNumber(page.getNumber());
         pageDTO.setSize(page.getSize());

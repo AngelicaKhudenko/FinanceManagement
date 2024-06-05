@@ -4,10 +4,20 @@ import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
+import by.it_academy.jd2.account_service.token.dto.UserDTO;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -21,6 +31,8 @@ public class AccountServiceImpl implements IAccountService {
 
     private final Converter<AccountCUDTO, AccountEntity> creationConverter;
     private final IAccountRepository accountRepository;
+
+    private final String urlUserService ="/api/v1/cabinet/me";
 
     public AccountServiceImpl(Converter<AccountCUDTO, AccountEntity> creationConverter,
                               IAccountRepository accountRepository) {
@@ -49,6 +61,10 @@ public class AccountServiceImpl implements IAccountService {
         entity.setCreation(creation);
         entity.setUpdate(creation);
 
+        UserDTO userDTO = getUserByToken();
+
+        entity.setUser(userDTO.getUuid());
+
         this.accountRepository.saveAndFlush(entity);
     }
 
@@ -62,6 +78,14 @@ public class AccountServiceImpl implements IAccountService {
         }
 
         return optional.get();
+    }
+
+    @Override
+    public Page<AccountEntity> get(Pageable pageable) {
+
+        UserDTO userDTO = getUserByToken();
+
+        return this.accountRepository.findAllByUser(pageable, userDTO.getUuid());
     }
 
     @Transactional
@@ -107,5 +131,29 @@ public class AccountServiceImpl implements IAccountService {
         entity.setUpdate(LocalDateTime.now());
 
         this.accountRepository.saveAndFlush(entity);
+    }
+
+    private UserDTO getUserByToken () {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = (String) authentication.getCredentials();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
+        ResponseEntity<UserDTO> response = new RestTemplate().exchange(
+                this.urlUserService,
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                UserDTO.class
+        );
+
+        UserDTO userDTO = response.getBody();
+
+        if (userDTO == null) {
+            throw new IllegalStateException("Ошибка при обработке токена");
+        }
+
+        return userDTO;
     }
 }

@@ -1,7 +1,7 @@
-package by.it_academy.jd2.user_service.token;
+package by.it_academy.jd2.classifier_service.token;
 
-import by.it_academy.jd2.user_service.core.enums.EUserStatus;
-import by.it_academy.jd2.user_service.model.UserEntity;
+import by.it_academy.jd2.classifier_service.token.dto.UserDTO;
+import by.it_academy.jd2.classifier_service.token.enums.EUserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class UserDetailsExpanded implements UserDetails {
 
-    private final UserEntity user;
+    private final UserDTO user;
 
-    public UserDetailsExpanded(UserEntity user) {
+    public UserDetailsExpanded(UserDTO user) {
         this.user = user;
     }
 
@@ -29,13 +29,14 @@ public class UserDetailsExpanded implements UserDetails {
     @Override
     public String getPassword() {
 
-        return this.user.getPassword();
+        return null;
     }
 
     public UUID getUUID() {
 
         return this.user.getUuid();
     }
+
     @Override
     public String getUsername() {
 

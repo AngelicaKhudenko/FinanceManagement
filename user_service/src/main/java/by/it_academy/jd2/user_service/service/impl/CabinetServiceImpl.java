@@ -139,7 +139,7 @@ public class CabinetServiceImpl implements ICabinetService{
 
         UserDetailsExpanded details = this.userService.getDetails();
 
-        return this.userService.get(details.getUUID());
+        return this.userService.get(UUID.fromString(details.getUsername()));
     }
 
     private String generateVerificationCode() {

@@ -1,8 +1,8 @@
-package by.it_academy.jd2.classifier_service.core.dto;
+package by.it_academy.jd2.account_service.token.dto;
 
-import by.it_academy.jd2.classifier_service.controller.utils.LocalDateTimeSerializer;
-import by.it_academy.jd2.classifier_service.core.enums.EUserRole;
-import by.it_academy.jd2.classifier_service.core.enums.EUserStatus;
+import by.it_academy.jd2.account_service.controller.utils.LocalDateTimeSerializer;
+import by.it_academy.jd2.account_service.token.enums.EUserRole;
+import by.it_academy.jd2.account_service.token.enums.EUserStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;

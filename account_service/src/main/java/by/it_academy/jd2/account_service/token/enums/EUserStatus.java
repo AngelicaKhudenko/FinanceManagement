@@ -1,4 +1,4 @@
-package by.it_academy.jd2.classifier_service.core.enums;
+package by.it_academy.jd2.account_service.token.enums;
 
 import java.util.Optional;
 

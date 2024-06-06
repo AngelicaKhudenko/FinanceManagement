@@ -1,10 +1,7 @@
 package by.it_academy.jd2.account_service.model;
 
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -23,6 +20,7 @@ public class AccountEntity {
     private String title;
     private String description;
     private double balance;
+    @Enumerated(EnumType.STRING)
     private EAccountType type;
     private UUID currency;
 

@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://83.166.234.152:5432/audit_service
+    username: audit_service_app
+    password: 12345
+
+app:
+  jwt:
+    secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+    issuer: ITAcademy

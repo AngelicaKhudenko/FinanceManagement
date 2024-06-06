@@ -32,7 +32,7 @@ public class AccountServiceImpl implements IAccountService {
     private final Converter<AccountCUDTO, AccountEntity> creationConverter;
     private final IAccountRepository accountRepository;
 
-    private final String urlUserService ="/api/v1/cabinet/me";
+    private final String urlUserService = "/api/v1/cabinet/me";
 
     public AccountServiceImpl(Converter<AccountCUDTO, AccountEntity> creationConverter,
                               IAccountRepository accountRepository) {

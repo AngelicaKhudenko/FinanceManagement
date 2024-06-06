@@ -11,7 +11,7 @@ import by.it_academy.jd2.user_service.service.api.ICabinetService;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,26 +22,25 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 public class CabinetServiceImpl implements ICabinetService{
-    private final Converter<UserRegistrationCUDTO, UserCUDTO> registrationConverter;
     private final IUserService userService;
     private final IMailService mailService;
     private final IVerificationRepository verificationRepository;
     private final PasswordEncoder encoder;
     private final JwtTokenHandler jwtHandler;
+    private final ConversionService conversionService;
     private final static String urlVerification = "../verify";
 
-    public CabinetServiceImpl(Converter<UserRegistrationCUDTO, UserCUDTO> registrationConverter,
-                              IUserService userService, IMailService mailService,
+    public CabinetServiceImpl(IUserService userService, IMailService mailService,
                               IVerificationRepository verificationRepository,
                               PasswordEncoder encoder,
-                              JwtTokenHandler jwtHandler) {
+                              JwtTokenHandler jwtHandler, ConversionService conversionService) {
 
-        this.registrationConverter = registrationConverter;
         this.userService = userService;
         this.mailService = mailService;
         this.verificationRepository = verificationRepository;
         this.encoder = encoder;
         this.jwtHandler = jwtHandler;
+        this.conversionService = conversionService;
     }
 
     @Transactional
@@ -52,7 +51,7 @@ public class CabinetServiceImpl implements ICabinetService{
             throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
         }
 
-        UserCUDTO userCUDTO = this.registrationConverter.convert(user);
+        UserCUDTO userCUDTO = this.conversionService.convert(user,UserCUDTO.class);
 
         userCUDTO.setRole(EUserRole.USER);
         userCUDTO.setStatus(EUserStatus.WAITING_ACTIVATION);

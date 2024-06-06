@@ -4,7 +4,7 @@ import by.it_academy.jd2.audit_service.core.dto.AuditCUDTO;
 import by.it_academy.jd2.audit_service.model.AuditEntity;
 import by.it_academy.jd2.audit_service.repository.IAuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,13 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AuditServiceImpl implements IAuditService {
     private final IAuditRepository auditRepository;
-    private final Converter<AuditCUDTO, AuditEntity> creationConverter;
+    private final ConversionService conversionService;
 
     public AuditServiceImpl(IAuditRepository auditRepository,
-                            Converter<AuditCUDTO, AuditEntity> creationConverter) {
+                            ConversionService conversionService) {
 
         this.auditRepository = auditRepository;
-        this.creationConverter = creationConverter;
+        this.conversionService = conversionService;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class AuditServiceImpl implements IAuditService {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
-        AuditEntity entity = this.creationConverter.convert(audit);
+        AuditEntity entity = this.conversionService.convert(audit, AuditEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

@@ -4,7 +4,7 @@ import by.it_academy.jd2.classifier_service.core.dto.CategoryCUDTO;
 import by.it_academy.jd2.classifier_service.model.CategoryEntity;
 import by.it_academy.jd2.classifier_service.repository.ICategoryRepository;
 import by.it_academy.jd2.classifier_service.service.api.ICategoryService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,14 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements ICategoryService {
-    private final Converter<CategoryCUDTO, CategoryEntity> creationCategoryConverter;
+
+    private final ConversionService conversionService;
     private final ICategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(Converter<CategoryCUDTO, CategoryEntity> creationCategoryConverter,
+    public CategoryServiceImpl(ConversionService conversionService,
                                ICategoryRepository categoryRepository) {
 
-        this.creationCategoryConverter = creationCategoryConverter;
+        this.conversionService = conversionService;
         this.categoryRepository = categoryRepository;
     }
 
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements ICategoryService {
             throw new IllegalArgumentException("Отсутствует достаточно данных о категории операции");
         }
 
-        CategoryEntity entity = this.creationCategoryConverter.convert(category);
+        CategoryEntity entity = this.conversionService.convert(category, CategoryEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

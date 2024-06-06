@@ -3,7 +3,7 @@ package by.it_academy.jd2.classifier_service.controller.http;
 import by.it_academy.jd2.classifier_service.core.dto.*;
 import by.it_academy.jd2.classifier_service.model.CurrencyEntity;
 import by.it_academy.jd2.classifier_service.service.api.ICurrencyService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class ClassifierController {
 
     private final ICurrencyService currencyService;
-    private final Converter<CurrencyEntity, CurrencyDTO> entityCurrencyDTOConverter;
+    private final ConversionService conversionService;
 
     public ClassifierController(ICurrencyService currencyService,
-                                Converter<CurrencyEntity, CurrencyDTO> entityCurrencyDTOConverter) {
+                                ConversionService conversionService) {
 
         this.currencyService = currencyService;
-        this.entityCurrencyDTOConverter = entityCurrencyDTOConverter;
+        this.conversionService = conversionService;
+
     }
 
     @PostMapping
@@ -39,7 +40,7 @@ public class ClassifierController {
 
         Page<CurrencyEntity> entities = this.currencyService.get(pageable);
 
-        Page<CurrencyDTO> currencyDTOS = entities.map(this.entityCurrencyDTOConverter::convert);
+        Page<CurrencyDTO> currencyDTOS = entities.map(entity -> conversionService.convert(entity, CurrencyDTO.class));
 
         return new PageDTO<>(currencyDTOS);
     }

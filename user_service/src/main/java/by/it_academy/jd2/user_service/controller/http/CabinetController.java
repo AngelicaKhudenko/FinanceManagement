@@ -6,7 +6,7 @@ import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.dto.UserRegistrationCUDTO;
 import by.it_academy.jd2.user_service.service.api.ICabinetService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/cabinet")
 public class CabinetController {
     private final ICabinetService cabinetService;
-    private final Converter<UserEntity, UserDTO> converter;
+    private final ConversionService conversionService;
 
     public CabinetController(ICabinetService cabinetService,
-                          Converter<UserEntity, UserDTO> converter) {
+                             ConversionService conversionService) {
 
         this.cabinetService = cabinetService;
-        this.converter = converter;
+        this.conversionService = conversionService;
     }
 
     @PostMapping(value = "/registration")
@@ -54,6 +54,6 @@ public class CabinetController {
 
         UserEntity entity = this.cabinetService.getInfoAboutMe();
 
-        return this.converter.convert(entity);
+        return this.conversionService.convert(entity,UserDTO.class);
     }
 }

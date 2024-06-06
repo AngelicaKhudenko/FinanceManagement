@@ -5,7 +5,7 @@ import by.it_academy.jd2.classifier_service.core.dto.CategoryDTO;
 import by.it_academy.jd2.classifier_service.core.dto.PageDTO;
 import by.it_academy.jd2.classifier_service.model.CategoryEntity;
 import by.it_academy.jd2.classifier_service.service.api.ICategoryService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/classifier/operation/category")
 public class CategoryController {
     private final ICategoryService categoryService;
-    private final Converter<CategoryEntity, CategoryDTO> entityCategoryDTOConverter;
+    private final ConversionService conversionService;
 
     public CategoryController(ICategoryService categoryService,
-                              Converter<CategoryEntity, CategoryDTO> entityCategoryDTOConverter) {
+                              ConversionService conversionService) {
 
         this.categoryService = categoryService;
-        this.entityCategoryDTOConverter = entityCategoryDTOConverter;
+        this.conversionService = conversionService;
     }
 
     @PostMapping
@@ -40,7 +40,7 @@ public class CategoryController {
 
         Page<CategoryEntity> entities = this.categoryService.get(pageable);
 
-        Page<CategoryDTO> categoryDTOS = entities.map(this.entityCategoryDTOConverter::convert);
+        Page<CategoryDTO> categoryDTOS = entities.map(entity -> conversionService.convert(entity, CategoryDTO.class));
 
         return new PageDTO<>(categoryDTOS);
     }

@@ -5,7 +5,7 @@ import by.it_academy.jd2.account_service.core.dto.PageDTO;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,14 +19,14 @@ import java.util.UUID;
 public class AccountController {
 
     private final IAccountService accountService;
-    private final Converter<AccountEntity, AccountDTO> entityAccountDTOConverter;
+    private final ConversionService conversionService;
 
 
     public AccountController(IAccountService accountService,
-                             Converter<AccountEntity, AccountDTO> entityAccountDTOConverter) {
+                             ConversionService conversionService) {
 
         this.accountService = accountService;
-        this.entityAccountDTOConverter = entityAccountDTOConverter;
+        this.conversionService = conversionService;
     }
 
     @PostMapping
@@ -44,7 +44,7 @@ public class AccountController {
 
         Page<AccountEntity> entities = this.accountService.get(pageable);
 
-        Page<AccountDTO> accountDTOS = entities.map(this.entityAccountDTOConverter::convert);
+        Page<AccountDTO> accountDTOS = entities.map(entity -> conversionService.convert(entity, AccountDTO.class));
 
         return new PageDTO<>(accountDTOS);
     }
@@ -53,7 +53,7 @@ public class AccountController {
 
         AccountEntity entity = this.accountService.get(uuid);
 
-        return this.entityAccountDTOConverter.convert(entity);
+        return this.conversionService.convert(entity, AccountDTO.class);
     }
 
     @PutMapping(value = "/{uuid}/dt_update/{dt_update}")

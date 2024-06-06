@@ -5,7 +5,7 @@ import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
 import by.it_academy.jd2.audit_service.core.dto.PageDTO;
 import by.it_academy.jd2.audit_service.model.AuditEntity;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,14 +19,14 @@ import java.util.UUID;
 public class AuditController {
 
     private final IAuditService auditService;
-    private final Converter<AuditEntity, AuditDTO> entityAuditDTOConverter;
+    private final ConversionService conversionService;
 
 
     public AuditController(IAuditService auditService,
-                           Converter<AuditEntity, AuditDTO> entityAuditDTOConverter) {
+                           ConversionService conversionService) {
 
         this.auditService = auditService;
-        this.entityAuditDTOConverter = entityAuditDTOConverter;
+        this.conversionService = conversionService;
     }
 
     @PostMapping
@@ -44,7 +44,7 @@ public class AuditController {
 
         Page<AuditEntity> entities = this.auditService.get(pageable);
 
-        Page<AuditDTO> accountDTOS = entities.map(this.entityAuditDTOConverter::convert);
+        Page<AuditDTO> accountDTOS = entities.map(entity -> conversionService.convert(entity, AuditDTO.class));
 
         return new PageDTO<>(accountDTOS);
     }
@@ -54,6 +54,6 @@ public class AuditController {
 
         AuditEntity entity = this.auditService.get(uuid);
 
-        return this.entityAuditDTOConverter.convert(entity);
+        return this.conversionService.convert(entity, AuditDTO.class);
     }
 }

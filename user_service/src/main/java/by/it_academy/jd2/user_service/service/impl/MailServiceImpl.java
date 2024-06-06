@@ -5,7 +5,7 @@ import by.it_academy.jd2.user_service.core.enums.EMailStatus;
 import by.it_academy.jd2.user_service.model.MailEntity;
 import by.it_academy.jd2.user_service.repository.IMailRepository;
 import by.it_academy.jd2.user_service.service.api.IMailService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,15 +22,15 @@ public class MailServiceImpl implements IMailService {
 
     private final JavaMailSender javaMailSender;
     private final IMailRepository mailRepository;
-    private final Converter<MailDTO, MailEntity> converter;
+    private final ConversionService conversionService;
 
     public MailServiceImpl(JavaMailSender javaMailSender,
                            IMailRepository mailRepository,
-                           Converter<MailDTO, MailEntity> converter) {
+                           ConversionService conversionService) {
 
         this.javaMailSender = javaMailSender;
         this.mailRepository = mailRepository;
-        this.converter = converter;
+        this.conversionService = conversionService;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MailServiceImpl implements IMailService {
             throw new IllegalArgumentException("Не переданы параметры для создания сообщения");
         }
 
-        MailEntity entity = this.converter.convert(mailDTO);
+        MailEntity entity = this.conversionService.convert(mailDTO, MailEntity.class);
 
         entity.setUuid(UUID.randomUUID());
         entity.setStatus(EMailStatus.LOADED);

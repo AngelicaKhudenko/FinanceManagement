@@ -7,7 +7,7 @@ import by.it_academy.jd2.user_service.token.UserHolderService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import jakarta.persistence.OptimisticLockException;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,18 +24,18 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
-    private final Converter<UserCUDTO, UserEntity> creationConverter;
     private final PasswordEncoder encoder;
     private final UserHolderService userHolderService;
+    private final ConversionService conversionService;
 
     public UserServiceImpl(IUserRepository userRepository,
-                           Converter<UserCUDTO, UserEntity> creationConverter, PasswordEncoder encoder,
-                           UserHolderService userHolderService) {
+                           PasswordEncoder encoder,
+                           UserHolderService userHolderService, ConversionService conversionService) {
 
         this.userRepository = userRepository;
-        this.creationConverter = creationConverter;
         this.encoder = encoder;
         this.userHolderService = userHolderService;
+        this.conversionService = conversionService;
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Пользователь с таким адресом электронной почты уже существует");
         }
 
-        UserEntity entity = this.creationConverter.convert(user);
+        UserEntity entity = this.conversionService.convert(user,UserEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

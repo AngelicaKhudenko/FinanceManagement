@@ -7,7 +7,7 @@ import by.it_academy.jd2.account_service.repository.IOperationRepository;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
 import by.it_academy.jd2.account_service.service.api.IOperationService;
 import jakarta.persistence.OptimisticLockException;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,15 +19,14 @@ import java.util.UUID;
 
 public class OperationServiceImpl implements IOperationService {
 
-    private final Converter<OperationCUDTO, OperationEntity> creationConverter;
+    private final ConversionService conversionService;
     private final IOperationRepository operationRepository;
     private final IAccountService accountService;
 
-    public OperationServiceImpl(Converter<OperationCUDTO, OperationEntity> creationConverter,
+    public OperationServiceImpl(ConversionService conversionService,
                                 IOperationRepository operationRepository,
                                 IAccountService accountService) {
-
-        this.creationConverter = creationConverter;
+        this.conversionService = conversionService;
         this.operationRepository = operationRepository;
         this.accountService = accountService;
     }
@@ -37,7 +36,7 @@ public class OperationServiceImpl implements IOperationService {
 
         checkAccount(uuid);
 
-        OperationEntity entity = this.creationConverter.convert(operation);
+        OperationEntity entity = this.conversionService.convert(operation,OperationEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

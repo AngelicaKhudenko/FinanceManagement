@@ -5,7 +5,7 @@ import by.it_academy.jd2.account_service.core.dto.OperationDTO;
 import by.it_academy.jd2.account_service.core.dto.PageDTO;
 import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.service.api.IOperationService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +19,14 @@ import java.util.UUID;
 public class OperationController {
     private final IOperationService operationService;
 
-    private final Converter<OperationEntity, OperationDTO> entityOperationDTOConverter;
+    private final ConversionService conversionService;
 
     public OperationController(IOperationService operationService,
-                               Converter<OperationEntity, OperationDTO> entityOperationDTOConverter) {
+                               ConversionService conversionService) {
 
         this.operationService = operationService;
-        this.entityOperationDTOConverter = entityOperationDTOConverter;
+
+        this.conversionService = conversionService;
     }
 
     @PostMapping
@@ -45,7 +46,7 @@ public class OperationController {
 
         Page<OperationEntity> entities = this.operationService.get(pageable);
 
-        Page<OperationDTO> operationDTOS = entities.map(this.entityOperationDTOConverter::convert);
+        Page<OperationDTO> operationDTOS = entities.map(entity -> conversionService.convert(entity, OperationDTO.class));
 
         return new PageDTO<>(operationDTOS);
     }

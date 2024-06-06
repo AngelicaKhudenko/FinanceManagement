@@ -6,7 +6,7 @@ import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
 import by.it_academy.jd2.account_service.token.dto.UserDTO;
 import jakarta.persistence.OptimisticLockException;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -29,15 +29,14 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class AccountServiceImpl implements IAccountService {
 
-    private final Converter<AccountCUDTO, AccountEntity> creationConverter;
+    private final ConversionService conversionService;
     private final IAccountRepository accountRepository;
 
     private final String urlUserService = "/api/v1/cabinet/me";
 
-    public AccountServiceImpl(Converter<AccountCUDTO, AccountEntity> creationConverter,
+    public AccountServiceImpl(ConversionService conversionService,
                               IAccountRepository accountRepository) {
-
-        this.creationConverter = creationConverter;
+        this.conversionService = conversionService;
         this.accountRepository = accountRepository;
     }
 
@@ -53,7 +52,7 @@ public class AccountServiceImpl implements IAccountService {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
-        AccountEntity entity = this.creationConverter.convert(account);
+        AccountEntity entity = this.conversionService.convert(account, AccountEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

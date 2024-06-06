@@ -4,7 +4,7 @@ import by.it_academy.jd2.classifier_service.core.dto.CurrencyCUDTO;
 import by.it_academy.jd2.classifier_service.model.CurrencyEntity;
 import by.it_academy.jd2.classifier_service.repository.ICurrencyRepository;
 import by.it_academy.jd2.classifier_service.service.api.ICurrencyService;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,13 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 public class CurrencyServiceImpl implements ICurrencyService {
-
-    private final Converter<CurrencyCUDTO, CurrencyEntity> creationCurrencyConverter;
+    private final ConversionService conversionService;
     private final ICurrencyRepository currencyRepository;
 
-    public CurrencyServiceImpl(Converter<CurrencyCUDTO, CurrencyEntity> creationCurrencyConverter,
+    public CurrencyServiceImpl(ConversionService conversionService,
                                ICurrencyRepository currencyRepository) {
 
-        this.creationCurrencyConverter = creationCurrencyConverter;
+        this.conversionService = conversionService;
         this.currencyRepository = currencyRepository;
     }
 
@@ -35,7 +34,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
             throw new IllegalArgumentException("Отсутствует достаточно данных о валюте");
         }
 
-        CurrencyEntity entity = this.creationCurrencyConverter.convert(currency);
+        CurrencyEntity entity = this.conversionService.convert(currency, CurrencyEntity.class);
 
         entity.setUuid(UUID.randomUUID());
 

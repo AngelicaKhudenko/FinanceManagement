@@ -5,7 +5,7 @@ import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +19,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final IUserService userService;
-    private final Converter<UserEntity, UserDTO> entityUserDTOConverter;
+    private final ConversionService conversionService;
 
     public UserController(IUserService userService,
-                          Converter<UserEntity, UserDTO> entityUserDTOConverter) {
+                          ConversionService conversionService) {
 
         this.userService = userService;
-        this.entityUserDTOConverter = entityUserDTOConverter;
+        this.conversionService = conversionService;
     }
 
     @PostMapping
@@ -43,7 +43,7 @@ public class UserController {
 
         Page<UserEntity> entities = this.userService.get(pageable);
 
-        Page<UserDTO> userDTOS = entities.map(this.entityUserDTOConverter::convert);
+        Page<UserDTO> userDTOS = entities.map(entity -> conversionService.convert(entity, UserDTO.class));
 
         return new PageDTO<>(userDTOS);
     }
@@ -53,7 +53,7 @@ public class UserController {
 
         UserEntity entity = this.userService.get(uuid);
 
-        return this.entityUserDTOConverter.convert(entity);
+        return this.conversionService.convert(entity,UserDTO.class);
     }
 
     @PutMapping(value = "/{uuid}/dt_update/{dt_update}")

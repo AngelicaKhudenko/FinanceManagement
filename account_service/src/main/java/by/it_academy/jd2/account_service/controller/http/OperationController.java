@@ -2,7 +2,7 @@ package by.it_academy.jd2.account_service.controller.http;
 
 import by.it_academy.jd2.account_service.core.dto.OperationCUDTO;
 import by.it_academy.jd2.account_service.core.dto.OperationDTO;
-import by.it_academy.jd2.account_service.core.dto.PageOperationDTO;
+import by.it_academy.jd2.account_service.core.dto.PageDTO;
 import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.service.api.IOperationService;
 import org.springframework.core.convert.converter.Converter;
@@ -20,15 +20,12 @@ public class OperationController {
     private final IOperationService operationService;
 
     private final Converter<OperationEntity, OperationDTO> entityOperationDTOConverter;
-    private final Converter<Page<OperationDTO>, PageOperationDTO> pageOperationDTOConverter;
 
     public OperationController(IOperationService operationService,
-                               Converter<OperationEntity, OperationDTO> entityOperationDTOConverter,
-                               Converter<Page<OperationDTO>, PageOperationDTO> pageOperationDTOConverter) {
+                               Converter<OperationEntity, OperationDTO> entityOperationDTOConverter) {
 
         this.operationService = operationService;
         this.entityOperationDTOConverter = entityOperationDTOConverter;
-        this.pageOperationDTOConverter = pageOperationDTOConverter;
     }
 
     @PostMapping
@@ -41,8 +38,8 @@ public class OperationController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PageOperationDTO get(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                           @RequestParam(value = "size", defaultValue = "20") Integer size) {
+    public PageDTO<OperationDTO> get(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                     @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -50,7 +47,7 @@ public class OperationController {
 
         Page<OperationDTO> operationDTOS = entities.map(this.entityOperationDTOConverter::convert);
 
-        return this.pageOperationDTOConverter.convert(operationDTOS);
+        return new PageDTO<>(operationDTOS);
     }
 
     @PutMapping(value = "/{uuid_operation}/dt_update/{dt_update}")

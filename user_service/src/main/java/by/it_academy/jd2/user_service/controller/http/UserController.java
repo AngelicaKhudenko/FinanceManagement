@@ -1,6 +1,6 @@
 package by.it_academy.jd2.user_service.controller.http;
 
-import by.it_academy.jd2.user_service.core.dto.PageUserDTO;
+import by.it_academy.jd2.user_service.core.dto.PageDTO;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
@@ -20,15 +20,12 @@ import java.util.UUID;
 public class UserController {
     private final IUserService userService;
     private final Converter<UserEntity, UserDTO> entityUserDTOConverter;
-    private final Converter<Page<UserDTO>, PageUserDTO> pageUserDTOConverter;
 
     public UserController(IUserService userService,
-                          Converter<UserEntity, UserDTO> entityUserDTOConverter,
-                          Converter<Page<UserDTO>, PageUserDTO> pageUserDTOConverter) {
+                          Converter<UserEntity, UserDTO> entityUserDTOConverter) {
 
         this.userService = userService;
         this.entityUserDTOConverter = entityUserDTOConverter;
-        this.pageUserDTOConverter = pageUserDTOConverter;
     }
 
     @PostMapping
@@ -39,8 +36,8 @@ public class UserController {
     }
 
     @GetMapping
-    public PageUserDTO get(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                           @RequestParam(value = "size", defaultValue = "20") Integer size) {
+    public PageDTO<UserDTO> get(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                       @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -48,7 +45,7 @@ public class UserController {
 
         Page<UserDTO> userDTOS = entities.map(this.entityUserDTOConverter::convert);
 
-        return this.pageUserDTOConverter.convert(userDTOS);
+        return new PageDTO<>(userDTOS);
     }
 
     @GetMapping(value = "/{uuid}")

@@ -15,15 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class ClassifierController {
 
     private final ICurrencyService currencyService;
-    private final Converter<Page<CurrencyDTO>, PageCurrencyDTO> pageCurrencyDTOConverter;
     private final Converter<CurrencyEntity, CurrencyDTO> entityCurrencyDTOConverter;
 
     public ClassifierController(ICurrencyService currencyService,
-                                Converter<Page<CurrencyDTO>, PageCurrencyDTO> pageCurrencyDTOConverter,
                                 Converter<CurrencyEntity, CurrencyDTO> entityCurrencyDTOConverter) {
 
         this.currencyService = currencyService;
-        this.pageCurrencyDTOConverter = pageCurrencyDTOConverter;
         this.entityCurrencyDTOConverter = entityCurrencyDTOConverter;
     }
 
@@ -35,7 +32,7 @@ public class ClassifierController {
     }
 
     @GetMapping
-    public PageCurrencyDTO getCurrency(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public PageDTO<CurrencyDTO> getCurrency(@RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -44,6 +41,6 @@ public class ClassifierController {
 
         Page<CurrencyDTO> currencyDTOS = entities.map(this.entityCurrencyDTOConverter::convert);
 
-        return this.pageCurrencyDTOConverter.convert(currencyDTOS);
+        return new PageDTO<>(currencyDTOS);
     }
 }

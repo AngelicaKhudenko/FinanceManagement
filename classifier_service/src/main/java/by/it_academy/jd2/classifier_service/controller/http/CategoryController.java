@@ -2,7 +2,7 @@ package by.it_academy.jd2.classifier_service.controller.http;
 
 import by.it_academy.jd2.classifier_service.core.dto.CategoryCUDTO;
 import by.it_academy.jd2.classifier_service.core.dto.CategoryDTO;
-import by.it_academy.jd2.classifier_service.core.dto.PageCategoryDTO;
+import by.it_academy.jd2.classifier_service.core.dto.PageDTO;
 import by.it_academy.jd2.classifier_service.model.CategoryEntity;
 import by.it_academy.jd2.classifier_service.service.api.ICategoryService;
 import org.springframework.core.convert.converter.Converter;
@@ -16,15 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/classifier/operation/category")
 public class CategoryController {
     private final ICategoryService categoryService;
-    private final Converter<Page<CategoryDTO>, PageCategoryDTO> pageCategoryDTOConverter;
     private final Converter<CategoryEntity, CategoryDTO> entityCategoryDTOConverter;
 
     public CategoryController(ICategoryService categoryService,
-                              Converter<Page<CategoryDTO>, PageCategoryDTO> pageCategoryDTOConverter,
                               Converter<CategoryEntity, CategoryDTO> entityCategoryDTOConverter) {
 
         this.categoryService = categoryService;
-        this.pageCategoryDTOConverter = pageCategoryDTOConverter;
         this.entityCategoryDTOConverter = entityCategoryDTOConverter;
     }
 
@@ -36,8 +33,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public PageCategoryDTO getCategory(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                       @RequestParam(value = "size", defaultValue = "20") Integer size) {
+    public PageDTO<CategoryDTO> getCategory(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                               @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -45,6 +42,6 @@ public class CategoryController {
 
         Page<CategoryDTO> categoryDTOS = entities.map(this.entityCategoryDTOConverter::convert);
 
-        return this.pageCategoryDTOConverter.convert(categoryDTOS);
+        return new PageDTO<>(categoryDTOS);
     }
 }

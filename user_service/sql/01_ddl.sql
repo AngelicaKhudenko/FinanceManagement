@@ -27,17 +27,18 @@ CREATE TABLE app.mails
 (
     id uuid NOT NULL,
     dt_create timestamp(3),
+    dt_update timestamp(3),
     status character varying,
     sender character varying,
     topic character varying,
-    adressee character varying,
+    addressee character varying,
     text character varying,
     CONSTRAINT mails_id_pk PRIMARY KEY (id),
     CONSTRAINT mails_dt_create_not_null CHECK (dt_create IS NOT NULL),
     CONSTRAINT mails_status_not_null CHECK (status IS NOT NULL),
     CONSTRAINT mails_sender_not_null CHECK (sender IS NOT NULL),
     CONSTRAINT mails_topic_not_null CHECK (topic IS NOT NULL),
-    CONSTRAINT mails_adressee_not_null CHECK (adressee IS NOT NULL),
+    CONSTRAINT mails_addressee_not_null CHECK (addressee IS NOT NULL),
     CONSTRAINT mails_text_not_null CHECK (text IS NOT NULL)
 );
 
@@ -48,6 +49,7 @@ CREATE TABLE app.verification
 (
     mail character varying NOT NULL,
     code character varying,
+    CONSTRAINT verification_id_pk PRIMARY KEY (mail),
     CONSTRAINT verification_code_not_null CHECK (code IS NOT NULL)
 );
 

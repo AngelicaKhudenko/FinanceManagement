@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Table(name="operation",schema = "app")
 public class OperationEntity {
-
     @Id
     @Column(name = "id")
     private UUID uuid;
@@ -20,9 +19,9 @@ public class OperationEntity {
     private LocalDateTime creation;
     @Column(name = "dt_update")
     private LocalDateTime update;
-    private LocalDateTime date;
     private String description;
     private UUID category;
+    @Column(name = "value_operation")
     private Double value;
     private UUID currency;
 
@@ -32,7 +31,6 @@ public class OperationEntity {
     public OperationEntity(UUID uuid, UUID account,
                            LocalDateTime creation,
                            LocalDateTime update,
-                           LocalDateTime date,
                            String description,
                            UUID category,
                            Double value,
@@ -42,7 +40,6 @@ public class OperationEntity {
         this.account = account;
         this.creation = creation;
         this.update = update;
-        this.date = date;
         this.description = description;
         this.category = category;
         this.value = value;
@@ -79,14 +76,6 @@ public class OperationEntity {
 
     public void setUpdate(LocalDateTime update) {
         this.update = update;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
     }
 
     public String getDescription() {

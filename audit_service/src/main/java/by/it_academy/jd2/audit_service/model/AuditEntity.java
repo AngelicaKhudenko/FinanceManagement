@@ -14,6 +14,7 @@ public class AuditEntity {
     private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime creation;
+    @Column(name = "id_user")
     private UUID user;
     private String text;
     @Enumerated(EnumType.STRING)

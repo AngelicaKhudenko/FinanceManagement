@@ -12,6 +12,7 @@ public class AccountEntity {
     @Id
     @Column(name = "id")
     private UUID uuid;
+    @Column(name = "id_user")
     private UUID user;
     @Column(name = "dt_create")
     private LocalDateTime creation;

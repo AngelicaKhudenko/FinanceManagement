@@ -3,8 +3,10 @@ package by.it_academy.jd2.user_service.service.impl;
 import by.it_academy.jd2.user_service.core.dto.MailDTO;
 import by.it_academy.jd2.user_service.core.enums.EMailStatus;
 import by.it_academy.jd2.user_service.model.MailEntity;
+import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.repository.IMailRepository;
 import by.it_academy.jd2.user_service.service.api.IMailService;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -71,6 +73,12 @@ public class MailServiceImpl implements IMailService {
 
         if (optional.isEmpty()) {
             throw new IllegalStateException("Письмо с таким id не зарегистрирвоан");
+        }
+
+        MailEntity entityDB = optional.get();
+
+        if (!entityDB.getUpdate().equals(entity.getUpdate())) {
+            throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
         }
 
         this.mailRepository.saveAndFlush(entity);

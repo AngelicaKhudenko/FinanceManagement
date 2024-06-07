@@ -14,12 +14,14 @@ public class MailEntity {
     private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime creation;
+    @Column(name = "dt_update")
+    private LocalDateTime update;
     @Enumerated(EnumType.STRING)
     private EMailStatus status;
     @Column(name = "sender")
     private String from;
     private String topic;
-    @Column(name = "adressee")
+    @Column(name = "addressee")
     private String to;
     private String text;
 
@@ -28,6 +30,7 @@ public class MailEntity {
 
     public MailEntity(UUID uuid,
                       LocalDateTime creation,
+                      LocalDateTime update,
                       EMailStatus status,
                       String from,
                       String topic,
@@ -36,6 +39,7 @@ public class MailEntity {
 
         this.uuid = uuid;
         this.creation = creation;
+        this.update = update;
         this.status = status;
         this.from = from;
         this.topic = topic;
@@ -57,6 +61,14 @@ public class MailEntity {
 
     public void setCreation(LocalDateTime creation) {
         this.creation = creation;
+    }
+
+    public LocalDateTime getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(LocalDateTime update) {
+        this.update = update;
     }
 
     public EMailStatus getStatus() {

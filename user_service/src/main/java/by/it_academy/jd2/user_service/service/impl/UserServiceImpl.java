@@ -10,6 +10,7 @@ import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements IUserService {
 
     @Transactional
     @Override
-    public void create(UserCUDTO user) {
+    public UserEntity create(UserCUDTO user) {
 
         if (!user.fieldsChanged()){
             throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
@@ -66,7 +67,7 @@ public class UserServiceImpl implements IUserService {
 
         entity.setPassword(this.encoder.encode(user.getPassword()));
 
-        this.userRepository.saveAndFlush(entity);
+        return this.userRepository.saveAndFlush(entity);
     }
 
     @Override

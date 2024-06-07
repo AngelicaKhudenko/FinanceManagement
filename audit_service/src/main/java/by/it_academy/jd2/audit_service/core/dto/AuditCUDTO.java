@@ -1,6 +1,7 @@
 package by.it_academy.jd2.audit_service.core.dto;
 
 import by.it_academy.jd2.audit_service.core.enums.ETypeEssence;
+import by.it_academy.jd2.audit_service.token.dto.UserDTO;
 import lombok.*;
 
 import java.util.Objects;
@@ -13,7 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class AuditCUDTO {
 
-    private UserActingDTO user;
+    private UserDTO user;
     private String text;
     private ETypeEssence type;
     private String id;

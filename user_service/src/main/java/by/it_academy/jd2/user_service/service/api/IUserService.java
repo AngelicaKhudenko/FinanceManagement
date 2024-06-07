@@ -5,13 +5,14 @@ import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserService {
 
-    void create(UserCUDTO user);
+    UserEntity create(UserCUDTO user);
     Page<UserEntity> get(Pageable pageable);
     UserEntity get(UUID uuid);
     void update(UUID uuid, Long updateDate, UserCUDTO user);

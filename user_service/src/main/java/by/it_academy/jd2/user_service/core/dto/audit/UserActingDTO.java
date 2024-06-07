@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserActingDTO {
-
     private UUID uuid;
     private String mail;
     private String fio;

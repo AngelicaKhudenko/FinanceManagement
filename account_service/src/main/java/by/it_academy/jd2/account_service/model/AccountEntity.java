@@ -16,8 +16,8 @@ public class AccountEntity {
     private UUID user;
     @Column(name = "dt_create")
     private LocalDateTime creation;
-    @Column(name = "dt_update")
     @Version
+    @Column(name = "dt_update")
     private LocalDateTime update;
     private String title;
     private String description;

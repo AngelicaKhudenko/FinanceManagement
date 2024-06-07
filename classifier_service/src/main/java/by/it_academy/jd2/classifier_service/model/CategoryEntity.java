@@ -13,8 +13,8 @@ public class CategoryEntity {
     private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime creation;
-    @Column(name = "dt_update")
     @Version
+    @Column(name = "dt_update")
     private LocalDateTime update;
     private String title;
 

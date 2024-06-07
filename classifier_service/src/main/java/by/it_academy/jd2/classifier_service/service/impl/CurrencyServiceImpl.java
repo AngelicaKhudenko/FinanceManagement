@@ -40,7 +40,6 @@ public class CurrencyServiceImpl implements ICurrencyService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
-        entity.setUpdate(creation);
 
         this.currencyRepository.saveAndFlush(entity);
     }

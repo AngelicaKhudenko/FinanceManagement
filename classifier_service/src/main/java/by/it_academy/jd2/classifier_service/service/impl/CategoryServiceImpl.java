@@ -41,7 +41,6 @@ public class CategoryServiceImpl implements ICategoryService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
-        entity.setUpdate(creation);
 
         this.categoryRepository.saveAndFlush(entity);
 

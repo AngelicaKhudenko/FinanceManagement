@@ -11,6 +11,7 @@ import by.it_academy.jd2.user_service.service.api.ICabinetService;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
+import by.it_academy.jd2.user_service.token.UserHolder;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,16 @@ public class CabinetServiceImpl implements ICabinetService{
     private final PasswordEncoder encoder;
     private final JwtTokenHandler jwtHandler;
     private final ConversionService conversionService;
+    private final UserHolder userHolder;
     private final static String urlVerification = "../verify";
 
-    public CabinetServiceImpl(IUserService userService, IMailService mailService,
+    public CabinetServiceImpl(IUserService userService,
+                              IMailService mailService,
                               IVerificationRepository verificationRepository,
                               PasswordEncoder encoder,
-                              JwtTokenHandler jwtHandler, ConversionService conversionService) {
+                              JwtTokenHandler jwtHandler,
+                              ConversionService conversionService,
+                              UserHolder userHolder) {
 
         this.userService = userService;
         this.mailService = mailService;
@@ -41,6 +46,7 @@ public class CabinetServiceImpl implements ICabinetService{
         this.encoder = encoder;
         this.jwtHandler = jwtHandler;
         this.conversionService = conversionService;
+        this.userHolder = userHolder;
     }
 
     @Transactional
@@ -136,7 +142,7 @@ public class CabinetServiceImpl implements ICabinetService{
     @Override
     public UserEntity getInfoAboutMe() {
 
-        UserDetailsExpanded details = this.userService.getDetails();
+        UserDetailsExpanded details = this.userHolder.getUser();
 
         return this.userService.get(UUID.fromString(details.getUsername()));
     }

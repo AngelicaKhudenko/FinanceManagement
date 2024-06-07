@@ -3,14 +3,10 @@ package by.it_academy.jd2.user_service.service.impl;
 import by.it_academy.jd2.user_service.core.dto.MailDTO;
 import by.it_academy.jd2.user_service.core.enums.EMailStatus;
 import by.it_academy.jd2.user_service.model.MailEntity;
-import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.repository.IMailRepository;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,30 +18,14 @@ import java.util.UUID;
 @Service
 public class MailServiceImpl implements IMailService {
 
-    private final JavaMailSender javaMailSender;
     private final IMailRepository mailRepository;
     private final ConversionService conversionService;
 
-    public MailServiceImpl(JavaMailSender javaMailSender,
-                           IMailRepository mailRepository,
+    public MailServiceImpl(IMailRepository mailRepository,
                            ConversionService conversionService) {
 
-        this.javaMailSender = javaMailSender;
         this.mailRepository = mailRepository;
         this.conversionService = conversionService;
-    }
-
-    @Override
-    public void send(MailEntity entity) throws MailException {
-
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setFrom(entity.getFrom());
-        message.setTo(entity.getTo());
-        message.setSubject(entity.getTopic());
-        message.setText(entity.getText());
-
-        javaMailSender.send(message);
     }
 
     @Transactional

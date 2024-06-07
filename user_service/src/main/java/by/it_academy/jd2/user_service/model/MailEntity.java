@@ -14,8 +14,8 @@ public class MailEntity {
     private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime creation;
-    @Column(name = "dt_update")
     @Version
+    @Column(name = "dt_update")
     private LocalDateTime update;
     @Enumerated(EnumType.STRING)
     private EMailStatus status;

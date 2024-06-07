@@ -56,9 +56,7 @@ public class AccountServiceImpl implements IAccountService {
 
         entity.setUuid(UUID.randomUUID());
 
-        LocalDateTime creation = LocalDateTime.now();
-        entity.setCreation(creation);
-        entity.setUpdate(creation);
+        entity.setCreation(LocalDateTime.now());
 
         UserDTO userDTO = getUserByToken();
 
@@ -126,8 +124,6 @@ public class AccountServiceImpl implements IAccountService {
         entity.setDescription(account.getDescription());
         entity.setType(account.getType());
         entity.setCurrency(account.getCurrency());
-
-        entity.setUpdate(LocalDateTime.now());
 
         this.accountRepository.saveAndFlush(entity);
     }

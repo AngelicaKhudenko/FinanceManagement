@@ -4,7 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserHolderService {
+public class UserHolder {
 
     public UserDetailsExpanded getUser(){
 

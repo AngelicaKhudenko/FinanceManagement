@@ -7,6 +7,7 @@ import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
+import by.it_academy.jd2.user_service.token.UserHolder;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +26,19 @@ import java.util.UUID;
 public class UserController {
     private final IUserService userService;
     private final ConversionService conversionService;
+    private final UserHolder userHolder;
     private final String urlAudit = "/audit";
     private final String urlUserService = "/cabinet/me";
 
     private final String create = "Создание пользователя по url: /users";
 
     public UserController(IUserService userService,
-                          ConversionService conversionService) {
+                          ConversionService conversionService,
+                          UserHolder userHolder) {
 
         this.userService = userService;
         this.conversionService = conversionService;
+        this.userHolder = userHolder;
     }
 
     @PostMapping
@@ -80,7 +84,7 @@ public class UserController {
     @GetMapping(value = "/details")
     public UserDetails details(){
 
-        return this.userService.getDetails();
+        return this.userHolder.getUser();
     }
 
     private void audit(String text, UserDTO user, String id) {

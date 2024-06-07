@@ -44,7 +44,6 @@ public class OperationServiceImpl implements IOperationService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
-        entity.setUpdate(creation);
 
         this.operationRepository.saveAndFlush(entity);
     }
@@ -77,7 +76,6 @@ public class OperationServiceImpl implements IOperationService {
             throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
         }
 
-        operation.setUpdate(LocalDateTime.now());
         operation.setDescription(operationCUDTO.getDescription());
         operation.setCategory(operationCUDTO.getCategory());
         operation.setValue(operationCUDTO.getValue());

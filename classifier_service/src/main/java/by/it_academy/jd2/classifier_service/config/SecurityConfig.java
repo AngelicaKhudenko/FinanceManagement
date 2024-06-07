@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/currency","/category").permitAll()
 
                 .requestMatchers(HttpMethod.POST,"/currency","/category")
-                .hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER")
+                .hasAnyRole("ADMIN","MANAGER")
 
                 .anyRequest().authenticated()
         );

@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers("/api/v1/audit/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers("/audit/**").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
         );
 

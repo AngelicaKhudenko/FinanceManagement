@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers("/api/v1/account/**").authenticated()
+                .requestMatchers("/account/**").authenticated()
                 .anyRequest().authenticated()
         );
 

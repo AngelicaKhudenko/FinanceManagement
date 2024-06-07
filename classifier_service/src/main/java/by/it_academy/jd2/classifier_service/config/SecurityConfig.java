@@ -5,6 +5,7 @@ import by.it_academy.jd2.classifier_service.controller.filter.JwtFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -41,13 +42,12 @@ public class SecurityConfig {
                 })
                 .and();
 
-
         http.authorizeHttpRequests(requests -> requests
 
-                .requestMatchers("/api/v1/users/**").hasAnyRole("ADMIN")
-                .requestMatchers("/api/v1/cabinet/me").authenticated()
+                .requestMatchers(HttpMethod.GET,"/currency","/category").permitAll()
 
-                .requestMatchers("/api/v1/cabinet/registration", "/api/v1/cabinet/verification","/api/v1/cabinet/login").permitAll()
+                .requestMatchers(HttpMethod.POST,"/currency","/category")
+                .hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER")
 
                 .anyRequest().authenticated()
         );

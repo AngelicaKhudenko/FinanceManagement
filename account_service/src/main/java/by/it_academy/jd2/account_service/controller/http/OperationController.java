@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/account/{uuid}/operation")
+@RequestMapping("/account/{uuid}/operation")
 public class OperationController {
     private final IOperationService operationService;
 

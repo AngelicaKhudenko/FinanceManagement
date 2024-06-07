@@ -27,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenHandler jwtHandler;
 
-    private final String urlUserService = "/api/v1/user/details";
+    private final String urlUserService = "/users/details";
 
     public JwtFilter(JwtTokenHandler jwtHandler) {
         this.jwtHandler = jwtHandler;

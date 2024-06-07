@@ -21,7 +21,7 @@ import java.util.UUID;
 @Component
 public class AuditEntityToDTOConverter implements Converter<AuditEntity, AuditDTO> {
 
-    private final String urlUserService = "/api/v1/users/";
+    private final String urlUserService = "/users/";
     @Override
     public AuditDTO convert(AuditEntity item) {
 

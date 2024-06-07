@@ -17,6 +17,7 @@ public class AccountEntity {
     @Column(name = "dt_create")
     private LocalDateTime creation;
     @Column(name = "dt_update")
+    @Version
     private LocalDateTime update;
     private String title;
     private String description;

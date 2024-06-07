@@ -1,9 +1,6 @@
 package by.it_academy.jd2.classifier_service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,6 +14,7 @@ public class CategoryEntity {
     @Column(name = "dt_create")
     private LocalDateTime creation;
     @Column(name = "dt_update")
+    @Version
     private LocalDateTime update;
     private String title;
 

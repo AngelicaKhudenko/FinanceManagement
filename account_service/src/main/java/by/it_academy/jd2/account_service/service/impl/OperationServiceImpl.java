@@ -40,7 +40,7 @@ public class OperationServiceImpl implements IOperationService {
 
         entity.setUuid(UUID.randomUUID());
 
-        entity.setAccount(uuid);
+        entity.setAccount(this.accountService.get(uuid));
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);

@@ -1,9 +1,6 @@
 package by.it_academy.jd2.account_service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,7 +11,9 @@ public class OperationEntity {
     @Id
     @Column(name = "id")
     private UUID uuid;
-    private UUID account;
+    @ManyToOne
+    @JoinColumn(name = "account")
+    private AccountEntity account;
     @Column(name = "dt_create")
     private LocalDateTime creation;
     @Column(name = "dt_update")
@@ -28,7 +27,8 @@ public class OperationEntity {
     public OperationEntity() {
     }
 
-    public OperationEntity(UUID uuid, UUID account,
+    public OperationEntity(UUID uuid,
+                           AccountEntity account,
                            LocalDateTime creation,
                            LocalDateTime update,
                            String description,
@@ -54,13 +54,14 @@ public class OperationEntity {
         this.uuid = uuid;
     }
 
-    public UUID getAccount() {
+    public AccountEntity getAccount() {
         return account;
     }
 
-    public void setAccount(UUID account) {
+    public void setAccount(AccountEntity account) {
         this.account = account;
     }
+
 
     public LocalDateTime getCreation() {
         return creation;

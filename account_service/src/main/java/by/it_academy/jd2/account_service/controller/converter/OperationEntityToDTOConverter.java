@@ -14,7 +14,6 @@ public class OperationEntityToDTOConverter implements Converter<OperationEntity,
                 .uuid(item.getUuid())
                 .creation(item.getCreation())
                 .update(item.getUpdate())
-                .date(item.getDate())
                 .description(item.getDescription())
                 .category(item.getCategory())
                 .value(item.getValue())

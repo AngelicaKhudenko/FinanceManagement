@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -43,5 +45,13 @@ public class CategoryController {
         Page<CategoryDTO> categoryDTOS = entities.map(entity -> conversionService.convert(entity, CategoryDTO.class));
 
         return new PageDTO<>(categoryDTOS);
+    }
+
+    @GetMapping(value = "/{uuid}")
+    public CategoryDTO getById(@PathVariable(value = "uuid") UUID uuid) {
+
+        CategoryEntity entity = this.categoryService.get(uuid);
+
+        return this.conversionService.convert(entity, CategoryDTO.class);
     }
 }

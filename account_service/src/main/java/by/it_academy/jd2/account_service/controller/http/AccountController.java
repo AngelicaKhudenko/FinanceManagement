@@ -48,6 +48,7 @@ public class AccountController {
 
         return new PageDTO<>(accountDTOS);
     }
+
     @GetMapping(value = "/{uuid}")
     public AccountDTO getById(@PathVariable(value = "uuid") UUID uuid) {
 

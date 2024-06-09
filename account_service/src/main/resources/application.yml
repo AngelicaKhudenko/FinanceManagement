@@ -14,3 +14,5 @@ app:
 
 urlUserService: http://user-service:8080/api/v1/users
 urlCabinetService: http://user-service:8080/api/v1/cabinet
+urlCategoryService: http://classifier-service:8080/api/v1/classifier/operation/category
+urlCurrencyService: http://classifier-service:8080/api/v1/classifier/currency

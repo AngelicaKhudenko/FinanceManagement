@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,5 +47,17 @@ public class CategoryServiceImpl implements ICategoryService {
     public Page<CategoryEntity> get(Pageable pageable) {
 
         return this.categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public CategoryEntity get(UUID uuid) {
+
+        Optional<CategoryEntity> optional = this.categoryRepository.findById(uuid);
+
+        if (optional.isEmpty()){
+            throw new IllegalArgumentException("Категория с таким id отсутствует");
+        }
+
+        return optional.get();
     }
 }

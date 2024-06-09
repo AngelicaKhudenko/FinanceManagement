@@ -1,6 +1,10 @@
 package by.it_academy.jd2.account_service.service.impl;
 
+import by.it_academy.jd2.account_service.core.dto.CategoryDTO;
+import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.dto.OperationCUDTO;
+import by.it_academy.jd2.account_service.feign.ICategoryServiceFeignClient;
+import by.it_academy.jd2.account_service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.repository.IOperationRepository;
@@ -10,6 +14,8 @@ import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -22,19 +28,39 @@ public class OperationServiceImpl implements IOperationService {
     private final ConversionService conversionService;
     private final IOperationRepository operationRepository;
     private final IAccountService accountService;
+    private final ICurrencyServiceFeignClient currencyServiceFeignClient;
+    private final ICategoryServiceFeignClient categoryServiceFeignClient;
 
     public OperationServiceImpl(ConversionService conversionService,
                                 IOperationRepository operationRepository,
-                                IAccountService accountService) {
+                                IAccountService accountService,
+                                ICurrencyServiceFeignClient currencyServiceFeignClient,
+                                ICategoryServiceFeignClient categoryServiceFeignClient) {
+
         this.conversionService = conversionService;
         this.operationRepository = operationRepository;
         this.accountService = accountService;
+        this.currencyServiceFeignClient = currencyServiceFeignClient;
+        this.categoryServiceFeignClient = categoryServiceFeignClient;
     }
 
     @Override
     public void create(UUID uuid, OperationCUDTO operation) {
 
         checkAccount(uuid);
+
+        UUID currency = operation.getCurrency();
+        UUID category = operation.getCategory();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = (String) authentication.getCredentials();
+
+        CurrencyDTO currencyDTO = this.currencyServiceFeignClient.get("Bearer " + token, currency);
+        CategoryDTO categoryDTO = this.categoryServiceFeignClient.get("Bearer " + token, category);
+
+        if (currencyDTO == null || categoryDTO == null) {
+            throw new IllegalArgumentException("Ошибка при обработке токена");
+        }
 
         OperationEntity entity = this.conversionService.convert(operation,OperationEntity.class);
 

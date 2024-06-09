@@ -1,7 +1,9 @@
 package by.it_academy.jd2.account_service.service.impl;
 
+import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
 import by.it_academy.jd2.account_service.feign.ICabinetServiceFeignClient;
+import by.it_academy.jd2.account_service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
@@ -29,13 +31,18 @@ public class AccountServiceImpl implements IAccountService {
     private final ConversionService conversionService;
     private final IAccountRepository accountRepository;
 
+    private final ICurrencyServiceFeignClient currencyServiceFeignClient;
+
     private final ICabinetServiceFeignClient cabinetServiceFeignClient;
 
     public AccountServiceImpl(ConversionService conversionService,
                               IAccountRepository accountRepository,
+                              ICurrencyServiceFeignClient currencyServiceFeignClient,
                               ICabinetServiceFeignClient cabinetServiceFeignClient) {
+
         this.conversionService = conversionService;
         this.accountRepository = accountRepository;
+        this.currencyServiceFeignClient = currencyServiceFeignClient;
         this.cabinetServiceFeignClient = cabinetServiceFeignClient;
     }
 
@@ -45,6 +52,17 @@ public class AccountServiceImpl implements IAccountService {
 
         if (EAccountType.getByName(account.getType().name()).isEmpty()) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
+        }
+
+        UUID currency = account.getCurrency();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = (String) authentication.getCredentials();
+
+        CurrencyDTO currencyDTO = this.currencyServiceFeignClient.get("Bearer " + token, currency);
+
+        if (currencyDTO == null) {
+            throw new IllegalArgumentException("Ошибка при обработке токена");
         }
 
         AccountEntity entity = this.conversionService.convert(account, AccountEntity.class);

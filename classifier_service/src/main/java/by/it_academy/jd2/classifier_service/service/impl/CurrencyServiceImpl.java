@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,5 +45,17 @@ public class CurrencyServiceImpl implements ICurrencyService {
     public Page<CurrencyEntity> get(Pageable pageable) {
 
         return this.currencyRepository.findAll(pageable);
+    }
+
+    @Override
+    public CurrencyEntity get(UUID uuid) {
+
+        Optional<CurrencyEntity> optional = this.currencyRepository.findById(uuid);
+
+        if (optional.isEmpty()){
+            throw new IllegalArgumentException("Валюта с таким id отсутствует");
+        }
+
+        return optional.get();
     }
 }

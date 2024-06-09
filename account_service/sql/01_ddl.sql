@@ -27,6 +27,7 @@ CREATE TABLE app.operation
     account uuid,
     dt_create timestamp(3),
     dt_update timestamp(3),
+    dt_operation timestamp(3),
     description character varying,
     category uuid,
     value_operation double precision,

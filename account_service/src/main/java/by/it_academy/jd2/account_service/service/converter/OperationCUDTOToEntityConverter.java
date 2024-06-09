@@ -13,6 +13,7 @@ public class OperationCUDTOToEntityConverter implements Converter<OperationCUDTO
         OperationEntity entity = new OperationEntity();
 
         entity.setDescription(item.getDescription());
+        entity.setDate(item.getDate());
         entity.setCategory(item.getCategory());
         entity.setValue(item.getValue());
         entity.setCurrency(item.getCurrency());

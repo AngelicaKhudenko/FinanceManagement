@@ -19,6 +19,8 @@ public class OperationEntity {
     @Version
     @Column(name = "dt_update")
     private LocalDateTime update;
+    @Column(name = "dt_operation")
+    private LocalDateTime date;
     private String description;
     private UUID category;
     @Column(name = "value_operation")
@@ -32,6 +34,7 @@ public class OperationEntity {
                            AccountEntity account,
                            LocalDateTime creation,
                            LocalDateTime update,
+                           LocalDateTime date,
                            String description,
                            UUID category,
                            Double value,
@@ -41,6 +44,7 @@ public class OperationEntity {
         this.account = account;
         this.creation = creation;
         this.update = update;
+        this.date = date;
         this.description = description;
         this.category = category;
         this.value = value;
@@ -63,7 +67,6 @@ public class OperationEntity {
         this.account = account;
     }
 
-
     public LocalDateTime getCreation() {
         return creation;
     }
@@ -78,6 +81,14 @@ public class OperationEntity {
 
     public void setUpdate(LocalDateTime update) {
         this.update = update;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public String getDescription() {

@@ -24,6 +24,7 @@ public class OperationDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime update;
 
+    @JsonProperty("dt_operation")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime date;
 

@@ -1,5 +1,6 @@
 package by.it_academy.jd2.account_service.service.impl;
 
+import by.it_academy.jd2.account_service.core.enums.EAccountType;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
@@ -44,7 +45,7 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public void create(AccountCUDTO account) {
 
-        if (!account.correctConstants(account.getType())) {
+        if (EAccountType.getByName(account.getType().name()).isEmpty()) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
@@ -93,7 +94,7 @@ public class AccountServiceImpl implements IAccountService {
             throw new IllegalArgumentException("Не передана дата прошлого обновления");
         }
 
-        if (!account.correctConstants(account.getType())) {
+        if (EAccountType.getByName(account.getType().name()).isEmpty()) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 

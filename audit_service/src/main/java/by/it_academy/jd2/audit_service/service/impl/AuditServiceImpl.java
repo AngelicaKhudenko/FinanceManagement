@@ -1,6 +1,7 @@
 package by.it_academy.jd2.audit_service.service.impl;
 
 import by.it_academy.jd2.audit_service.core.dto.AuditCUDTO;
+import by.it_academy.jd2.audit_service.core.enums.ETypeEssence;
 import by.it_academy.jd2.audit_service.model.AuditEntity;
 import by.it_academy.jd2.audit_service.repository.IAuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
@@ -37,7 +38,7 @@ public class AuditServiceImpl implements IAuditService {
     @Override
     public void create(AuditCUDTO audit) {
 
-        if (!audit.correctConstants(audit.getType())) {
+        if (ETypeEssence.getByName(audit.getType().name()).isEmpty()) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 

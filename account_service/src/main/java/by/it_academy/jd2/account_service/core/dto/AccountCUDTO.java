@@ -23,9 +23,4 @@ public class AccountCUDTO {
     private EAccountType type;
     @NotNull
     private UUID currency;
-
-    public boolean correctConstants(EAccountType accountType) {
-
-        return EAccountType.getByName(accountType.name()).isPresent();
-    }
 }

@@ -1,5 +1,7 @@
 package by.it_academy.jd2.user_service.service.impl;
 
+import by.it_academy.jd2.user_service.core.enums.EUserRole;
+import by.it_academy.jd2.user_service.core.enums.EUserStatus;
 import by.it_academy.jd2.user_service.repository.IUserRepository;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
@@ -38,7 +40,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserEntity create(UserCUDTO user) {
 
-        if (!user.correctConstants(user.getRole(),user.getStatus())) {
+        if (EUserRole.getByName(user.getRole().name()).isEmpty() ||
+                EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 
@@ -90,7 +94,9 @@ public class UserServiceImpl implements IUserService {
             throw new IllegalArgumentException("Не передана дата прошлого обновления");
         }
 
-        if (!user.correctConstants(user.getRole(),user.getStatus())) {
+        if (EUserRole.getByName(user.getRole().name()).isEmpty() ||
+                EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
 

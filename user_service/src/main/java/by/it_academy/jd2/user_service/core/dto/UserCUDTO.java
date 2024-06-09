@@ -26,12 +26,4 @@ public class UserCUDTO {
     @NotEmpty
     @NotNull
     private String password;
-
-    public boolean correctConstants(EUserRole role, EUserStatus status) {
-
-        boolean roleIsCorrect = EUserRole.getByName(role.name()).isPresent();
-        boolean statusIsCorrect = EUserStatus.getByName(status.name()).isPresent();
-
-        return roleIsCorrect && statusIsCorrect;
-    }
 }

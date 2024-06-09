@@ -22,9 +22,4 @@ public class AuditCUDTO {
     @NotEmpty
     @NotNull
     private String id;
-
-    public boolean correctConstants(ETypeEssence type) {
-
-        return ETypeEssence.getByName(type.name()).isPresent();
-    }
 }

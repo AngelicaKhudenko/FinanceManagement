@@ -30,7 +30,6 @@ public class CabinetServiceImpl implements ICabinetService{
     private final JwtTokenHandler jwtHandler;
     private final ConversionService conversionService;
     private final UserHolder userHolder;
-    private final static String urlVerification = "../verify";
 
     public CabinetServiceImpl(IUserService userService,
                               IMailService mailService,
@@ -153,7 +152,7 @@ public class CabinetServiceImpl implements ICabinetService{
         builder.append(" ");
         builder.append("Для верификации вашего аккаунта перейдите по ссылке:");
         builder.append(" ");
-        builder.append(urlVerification);
+        builder.append("${urlVerification}");
         builder.append("Ваш код верификации: ");
         builder.append(verificationCode);
 

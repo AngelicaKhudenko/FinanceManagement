@@ -1,6 +1,7 @@
 package by.it_academy.jd2.account_service.service.impl;
 
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
+import by.it_academy.jd2.account_service.feign.ICabinetServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
@@ -10,15 +11,10 @@ import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -33,12 +29,14 @@ public class AccountServiceImpl implements IAccountService {
     private final ConversionService conversionService;
     private final IAccountRepository accountRepository;
 
-    private final String urlUserService = "/cabinet/me";
+    private final ICabinetServiceFeignClient cabinetServiceFeignClient;
 
     public AccountServiceImpl(ConversionService conversionService,
-                              IAccountRepository accountRepository) {
+                              IAccountRepository accountRepository,
+                              ICabinetServiceFeignClient cabinetServiceFeignClient) {
         this.conversionService = conversionService;
         this.accountRepository = accountRepository;
+        this.cabinetServiceFeignClient = cabinetServiceFeignClient;
     }
 
     @Transactional
@@ -126,17 +124,7 @@ public class AccountServiceImpl implements IAccountService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = (String) authentication.getCredentials();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-
-        ResponseEntity<UserDTO> response = new RestTemplate().exchange(
-                this.urlUserService,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                UserDTO.class
-        );
-
-        UserDTO userDTO = response.getBody();
+        UserDTO userDTO = this.cabinetServiceFeignClient.getUser("Bearer " + token);
 
         if (userDTO == null) {
             throw new IllegalStateException("Ошибка при обработке токена");

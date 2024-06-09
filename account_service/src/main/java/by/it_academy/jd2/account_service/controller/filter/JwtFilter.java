@@ -1,20 +1,17 @@
 package by.it_academy.jd2.account_service.controller.filter;
 
 import by.it_academy.jd2.account_service.controller.utils.JwtTokenHandler;
+import by.it_academy.jd2.account_service.feign.IUserServiceFeignClient;
 import by.it_academy.jd2.account_service.token.UserDetailsExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -26,11 +23,12 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenHandler jwtHandler;
+    private final IUserServiceFeignClient userServiceFeignClient;
 
-    private final String urlUserService = "/users/details";
-
-    public JwtFilter(JwtTokenHandler jwtHandler) {
+    public JwtFilter(JwtTokenHandler jwtHandler,
+                     IUserServiceFeignClient userServiceFeignClient) {
         this.jwtHandler = jwtHandler;
+        this.userServiceFeignClient = userServiceFeignClient;
     }
 
     @Override
@@ -55,18 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-
-
-        ResponseEntity<UserDetailsExpanded> entity = new RestTemplate().exchange(
-                this.urlUserService,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
-                UserDetailsExpanded.class
-        );
-
-        UserDetailsExpanded userDetails = entity.getBody();
+        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
 
         if (userDetails == null) {
 

@@ -44,10 +44,6 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public void create(AccountCUDTO account) {
 
-        if (!account.fieldsChanged()) {
-            throw new IllegalArgumentException("Отсутствует достаточно данных о счете");
-        }
-
         if (!account.correctConstants(account.getType())) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
@@ -95,10 +91,6 @@ public class AccountServiceImpl implements IAccountService {
 
         if (updateDate == null) {
             throw new IllegalArgumentException("Не передана дата прошлого обновления");
-        }
-
-        if (!account.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о счете");
         }
 
         if (!account.correctConstants(account.getType())) {

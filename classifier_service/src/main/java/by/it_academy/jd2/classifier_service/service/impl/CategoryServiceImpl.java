@@ -31,10 +31,6 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public void create(CategoryCUDTO category) {
 
-        if (!category.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о категории операции");
-        }
-
         CategoryEntity entity = this.conversionService.convert(category, CategoryEntity.class);
 
         entity.setUuid(UUID.randomUUID());

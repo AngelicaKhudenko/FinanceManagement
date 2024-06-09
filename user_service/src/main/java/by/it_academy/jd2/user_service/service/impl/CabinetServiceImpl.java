@@ -53,10 +53,6 @@ public class CabinetServiceImpl implements ICabinetService{
     @Override
     public void create(UserRegistrationCUDTO user) {
 
-        if (!user.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
-        }
-
         UserCUDTO userCUDTO = this.conversionService.convert(user,UserCUDTO.class);
 
         userCUDTO.setRole(EUserRole.USER);
@@ -81,10 +77,6 @@ public class CabinetServiceImpl implements ICabinetService{
     @Transactional
     @Override
     public void verify(VerificationDTO verificationDTO) {
-
-        if (!verificationDTO.fieldsChanged()) {
-            throw new IllegalArgumentException("Не переданы данные для верификации");
-        }
 
         Optional<VerificationEntity> optional = this.verificationRepository.findById(verificationDTO.getMail());
 
@@ -112,10 +104,6 @@ public class CabinetServiceImpl implements ICabinetService{
 
     @Override
     public String login(LoginDTO loginDTO) {
-
-        if (!loginDTO.fieldsChanged()) {
-            throw new IllegalArgumentException("Не переданы параметры для входа");
-        }
 
         String mail = loginDTO.getMail();
         String password = loginDTO.getPassword();

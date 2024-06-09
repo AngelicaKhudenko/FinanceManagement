@@ -37,10 +37,6 @@ public class AuditServiceImpl implements IAuditService {
     @Override
     public void create(AuditCUDTO audit) {
 
-        if (!audit.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о действии");
-        }
-
         if (!audit.correctConstants(audit.getType())) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }

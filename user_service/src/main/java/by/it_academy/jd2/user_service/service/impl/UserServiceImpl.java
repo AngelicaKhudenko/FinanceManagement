@@ -38,10 +38,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserEntity create(UserCUDTO user) {
 
-        if (!user.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
-        }
-
         if (!user.correctConstants(user.getRole(),user.getStatus())) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
         }
@@ -92,10 +88,6 @@ public class UserServiceImpl implements IUserService {
 
         if (updateDate == null) {
             throw new IllegalArgumentException("Не передана дата прошлого обновления");
-        }
-
-        if (!user.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о пользователе");
         }
 
         if (!user.correctConstants(user.getRole(),user.getStatus())) {

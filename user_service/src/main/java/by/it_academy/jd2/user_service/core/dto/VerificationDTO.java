@@ -1,8 +1,8 @@
 package by.it_academy.jd2.user_service.core.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -11,11 +11,11 @@ import java.util.Objects;
 @NoArgsConstructor
 public class VerificationDTO {
 
+    @NotEmpty
+    @NotNull
     private String code;
+    @NotEmpty
+    @NotNull
     private String mail;
 
-    public boolean fieldsChanged() {
-        return Objects.nonNull(code) &&
-                Objects.nonNull(mail);
-    }
 }

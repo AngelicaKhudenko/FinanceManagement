@@ -32,10 +32,6 @@ public class MailServiceImpl implements IMailService {
     @Override
     public void create(MailDTO mailDTO) {
 
-        if (!mailDTO.fieldsChanged()) {
-            throw new IllegalArgumentException("Не переданы параметры для создания сообщения");
-        }
-
         MailEntity entity = this.conversionService.convert(mailDTO, MailEntity.class);
 
         entity.setUuid(UUID.randomUUID());

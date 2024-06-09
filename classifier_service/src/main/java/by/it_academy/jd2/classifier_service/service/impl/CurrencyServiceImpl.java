@@ -30,10 +30,6 @@ public class CurrencyServiceImpl implements ICurrencyService {
     @Override
     public void create(CurrencyCUDTO currency) {
 
-        if (!currency.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных о валюте");
-        }
-
         CurrencyEntity entity = this.conversionService.convert(currency, CurrencyEntity.class);
 
         entity.setUuid(UUID.randomUUID());

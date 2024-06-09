@@ -63,10 +63,6 @@ public class OperationServiceImpl implements IOperationService {
             throw new IllegalArgumentException("Не передана дата прошлого обновления");
         }
 
-        if (!operationCUDTO.fieldsChanged()){
-            throw new IllegalArgumentException("Отсутствует достаточно данных об операции");
-        }
-
         OperationEntity operation = get(operationUUID);
 
         Instant instant = Instant.ofEpochMilli(updateDate);

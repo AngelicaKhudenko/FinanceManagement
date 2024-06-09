@@ -1,8 +1,8 @@
 package by.it_academy.jd2.user_service.core.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -10,13 +10,13 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRegistrationCUDTO {
+    @NotEmpty
+    @NotNull
     private String mail;
+    @NotEmpty
+    @NotNull
     private String fio;
+    @NotEmpty
+    @NotNull
     private String password;
-
-    public boolean fieldsChanged() {
-        return Objects.nonNull(mail) &&
-                Objects.nonNull(fio) &&
-                Objects.nonNull(password);
-    }
 }

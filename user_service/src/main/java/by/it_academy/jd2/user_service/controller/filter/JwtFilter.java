@@ -1,7 +1,9 @@
 package by.it_academy.jd2.user_service.controller.filter;
 
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
-import by.it_academy.jd2.user_service.token.UserDetailsServiceExpanded;
+import by.it_academy.jd2.user_service.model.UserEntity;
+import by.it_academy.jd2.user_service.service.api.IUserService;
+import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,18 +18,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
-    private final UserDetailsServiceExpanded userManager;
     private final JwtTokenHandler jwtHandler;
+    private final IUserService userService;
 
-    public JwtFilter(UserDetailsServiceExpanded userManager, JwtTokenHandler jwtHandler) {
-        this.userManager = userManager;
+    public JwtFilter(JwtTokenHandler jwtHandler, IUserService userService) {
         this.jwtHandler = jwtHandler;
+        this.userService = userService;
     }
 
     @Override
@@ -52,8 +54,9 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetails userDetails = userManager
-                .loadUserByUsername(jwtHandler.getUUID(token));
+        UUID uuid = UUID.fromString(jwtHandler.getUUID(token));
+        UserEntity entity = this.userService.get(uuid);
+        UserDetails userDetails = new UserDetailsExpanded(entity);
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

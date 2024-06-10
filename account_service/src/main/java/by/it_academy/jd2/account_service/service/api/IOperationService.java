@@ -9,11 +9,11 @@ import java.util.UUID;
 
 public interface IOperationService {
 
-    void create(UUID uuid, OperationCUDTO operation);
+    OperationEntity create(UUID uuid, OperationCUDTO operation);
 
     Page<OperationEntity> get(Pageable pageable);
 
-    void update(UUID uuid, UUID operation, Long updateDate, OperationCUDTO operationCUDTO);
+    OperationEntity update(UUID uuid, UUID operation, Long updateDate, OperationCUDTO operationCUDTO);
 
     void delete(UUID uuid, UUID operation, Long updateDate);
 }

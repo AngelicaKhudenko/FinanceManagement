@@ -126,7 +126,7 @@ public class UserServiceImpl implements IUserService {
 
     @Transactional
     @Override
-    public void update(UserEntity entity) {
+    public UserEntity update(UserEntity entity) {
 
         Optional<UserEntity> optional = this.userRepository.findById(entity.getUuid());
 
@@ -141,6 +141,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         this.userRepository.saveAndFlush(entity);
+        return entityDB;
     }
 
     @Override

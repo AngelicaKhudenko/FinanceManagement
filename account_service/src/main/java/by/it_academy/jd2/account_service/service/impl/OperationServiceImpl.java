@@ -3,8 +3,8 @@ package by.it_academy.jd2.account_service.service.impl;
 import by.it_academy.jd2.account_service.core.dto.CategoryDTO;
 import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.dto.OperationCUDTO;
-import by.it_academy.jd2.account_service.feign.ICategoryServiceFeignClient;
-import by.it_academy.jd2.account_service.feign.ICurrencyServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.ICategoryServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.repository.IOperationRepository;
@@ -45,7 +45,7 @@ public class OperationServiceImpl implements IOperationService {
     }
 
     @Override
-    public void create(UUID uuid, OperationCUDTO operation) {
+    public OperationEntity create(UUID uuid, OperationCUDTO operation) {
 
         checkAccount(uuid);
 
@@ -71,7 +71,7 @@ public class OperationServiceImpl implements IOperationService {
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
 
-        this.operationRepository.saveAndFlush(entity);
+        return this.operationRepository.saveAndFlush(entity);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class OperationServiceImpl implements IOperationService {
     }
 
     @Override
-    public void update(UUID uuid, UUID operationUUID, Long updateDate, OperationCUDTO operationCUDTO) {
+    public OperationEntity update(UUID uuid, UUID operationUUID, Long updateDate, OperationCUDTO operationCUDTO) {
 
         checkAccount(uuid);
 
@@ -103,7 +103,7 @@ public class OperationServiceImpl implements IOperationService {
         operation.setValue(operationCUDTO.getValue());
         operation.setCurrency(operationCUDTO.getCurrency());
 
-        this.operationRepository.saveAndFlush(operation);
+        return this.operationRepository.saveAndFlush(operation);
     }
 
     @Override

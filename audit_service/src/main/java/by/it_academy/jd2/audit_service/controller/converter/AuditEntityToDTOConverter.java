@@ -4,7 +4,7 @@ import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
 
 import by.it_academy.jd2.audit_service.core.dto.UserActingDTO;
 import by.it_academy.jd2.audit_service.model.AuditEntity;
-import by.it_academy.jd2.audit_service.token.dto.UserDTO;
+import by.it_academy.jd2.audit_service.controller.token.dto.UserDTO;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

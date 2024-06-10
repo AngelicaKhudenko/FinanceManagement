@@ -10,8 +10,8 @@ import by.it_academy.jd2.user_service.repository.IVerificationRepository;
 import by.it_academy.jd2.user_service.service.api.ICabinetService;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
-import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
-import by.it_academy.jd2.user_service.token.UserHolder;
+import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
+import by.it_academy.jd2.user_service.controller.token.UserHolder;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,14 +50,14 @@ public class CabinetServiceImpl implements ICabinetService{
 
     @Transactional
     @Override
-    public void create(UserRegistrationCUDTO user) {
+    public UserEntity create(UserRegistrationCUDTO user) {
 
         UserCUDTO userCUDTO = this.conversionService.convert(user,UserCUDTO.class);
 
         userCUDTO.setRole(EUserRole.USER);
         userCUDTO.setStatus(EUserStatus.WAITING_ACTIVATION);
 
-        this.userService.create(userCUDTO);
+        UserEntity entity = this.userService.create(userCUDTO);
 
         String verificationCode = generateVerificationCode();
 
@@ -71,11 +71,13 @@ public class CabinetServiceImpl implements ICabinetService{
         MailDTO mail = generateVerificationMail(user.getMail(),verificationCode);
 
         this.mailService.create(mail);
+
+        return entity;
     }
 
     @Transactional
     @Override
-    public void verify(VerificationDTO verificationDTO) {
+    public UserEntity verify(VerificationDTO verificationDTO) {
 
         Optional<VerificationEntity> optional = this.verificationRepository.findById(verificationDTO.getMail());
 
@@ -98,7 +100,7 @@ public class CabinetServiceImpl implements ICabinetService{
         UserEntity user = optionalUser.get();
         user.setStatus(EUserStatus.ACTIVATED);
 
-        this.userService.update(user);
+        return this.userService.update(user);
     }
 
     @Override

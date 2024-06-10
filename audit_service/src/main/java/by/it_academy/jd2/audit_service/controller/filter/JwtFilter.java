@@ -1,8 +1,8 @@
 package by.it_academy.jd2.audit_service.controller.filter;
 
 import by.it_academy.jd2.audit_service.controller.utils.JwtTokenHandler;
-import by.it_academy.jd2.audit_service.feign.IUserServiceFeignClient;
-import by.it_academy.jd2.audit_service.token.UserDetailsExpanded;
+import by.it_academy.jd2.audit_service.service.feign.IUserServiceFeignClient;
+import by.it_academy.jd2.audit_service.controller.token.UserDetailsExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

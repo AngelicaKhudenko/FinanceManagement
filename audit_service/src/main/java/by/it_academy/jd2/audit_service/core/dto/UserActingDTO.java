@@ -1,9 +1,12 @@
 package by.it_academy.jd2.audit_service.core.dto;
 
-import by.it_academy.jd2.audit_service.token.enums.EUserRole;
+import by.it_academy.jd2.audit_service.controller.token.enums.EUserRole;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -11,9 +14,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserActingDTO {
-
+    @NotNull
     private UUID uuid;
+    @NotNull
+    @NotEmpty
     private String mail;
+    @NotNull
+    @NotEmpty
     private String fio;
+    @NotNull
     private EUserRole role;
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface ICategoryService {
-    void create(CategoryCUDTO category);
+    CategoryEntity create(CategoryCUDTO category);
     Page<CategoryEntity> get(Pageable pageable);
 
     CategoryEntity get(UUID uuid);

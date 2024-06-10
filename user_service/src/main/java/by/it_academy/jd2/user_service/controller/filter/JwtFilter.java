@@ -3,7 +3,7 @@ package by.it_academy.jd2.user_service.controller.filter;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
-import by.it_academy.jd2.user_service.token.UserDetailsExpanded;
+import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -7,8 +7,8 @@ import by.it_academy.jd2.user_service.core.dto.VerificationDTO;
 import by.it_academy.jd2.user_service.model.UserEntity;
 
 public interface ICabinetService {
-    void create(UserRegistrationCUDTO user);
-    void verify(VerificationDTO verificationDTO);
+    UserEntity create(UserRegistrationCUDTO user);
+    UserEntity verify(VerificationDTO verificationDTO);
     String login(LoginDTO user);
     UserEntity getInfoAboutMe();
 }

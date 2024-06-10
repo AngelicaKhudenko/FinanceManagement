@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Transactional
     @Override
-    public void create(CategoryCUDTO category) {
+    public CategoryEntity create(CategoryCUDTO category) {
 
         CategoryEntity entity = this.conversionService.convert(category, CategoryEntity.class);
 
@@ -39,8 +39,7 @@ public class CategoryServiceImpl implements ICategoryService {
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
 
-        this.categoryRepository.saveAndFlush(entity);
-
+        return this.categoryRepository.saveAndFlush(entity);
     }
 
     @Override

@@ -2,13 +2,13 @@ package by.it_academy.jd2.account_service.service.impl;
 
 import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
-import by.it_academy.jd2.account_service.feign.ICabinetServiceFeignClient;
-import by.it_academy.jd2.account_service.feign.ICurrencyServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.ICabinetServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
 import by.it_academy.jd2.account_service.core.dto.AccountCUDTO;
 import by.it_academy.jd2.account_service.service.api.IAccountService;
-import by.it_academy.jd2.account_service.token.dto.UserDTO;
+import by.it_academy.jd2.account_service.controller.token.dto.UserDTO;
 import jakarta.persistence.OptimisticLockException;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -48,7 +48,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Transactional
     @Override
-    public void create(AccountCUDTO account) {
+    public AccountEntity create(AccountCUDTO account) {
 
         if (EAccountType.getByName(account.getType().name()).isEmpty()) {
             throw new IllegalArgumentException("Переданы некорректные значения констант");
@@ -75,7 +75,7 @@ public class AccountServiceImpl implements IAccountService {
 
         entity.setUser(userDTO.getUuid());
 
-        this.accountRepository.saveAndFlush(entity);
+        return this.accountRepository.saveAndFlush(entity);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Transactional
     @Override
-    public void update(UUID uuid, Long updateDate, AccountCUDTO account) {
+    public AccountEntity update(UUID uuid, Long updateDate, AccountCUDTO account) {
 
         if (uuid == null) {
             throw new IllegalArgumentException("Не передан id");
@@ -135,6 +135,7 @@ public class AccountServiceImpl implements IAccountService {
         entity.setCurrency(account.getCurrency());
 
         this.accountRepository.saveAndFlush(entity);
+        return entity;
     }
 
     private UserDTO getUserByToken () {

@@ -9,11 +9,11 @@ import java.util.UUID;
 
 public interface IAccountService {
 
-    void create(AccountCUDTO account);
+    AccountEntity create(AccountCUDTO account);
 
     AccountEntity get(UUID uuid);
 
-    void update(UUID uuid, Long updateDate, AccountCUDTO account);
+    AccountEntity update(UUID uuid, Long updateDate, AccountCUDTO account);
 
     Page<AccountEntity> get(Pageable pageable);
 }

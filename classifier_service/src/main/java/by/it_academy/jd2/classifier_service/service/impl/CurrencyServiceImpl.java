@@ -29,7 +29,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
 
     @Transactional
     @Override
-    public void create(CurrencyCUDTO currency) {
+    public CurrencyEntity create(CurrencyCUDTO currency) {
 
         CurrencyEntity entity = this.conversionService.convert(currency, CurrencyEntity.class);
 
@@ -39,6 +39,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         entity.setCreation(creation);
 
         this.currencyRepository.saveAndFlush(entity);
+        return entity;
     }
 
     @Override

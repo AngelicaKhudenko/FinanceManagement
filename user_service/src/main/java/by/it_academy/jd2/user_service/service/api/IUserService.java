@@ -14,6 +14,6 @@ public interface IUserService {
     Page<UserEntity> get(Pageable pageable);
     UserEntity get(UUID uuid);
     void update(UUID uuid, Long updateDate, UserCUDTO user);
-    void update(UserEntity entity);
+    UserEntity update(UserEntity entity);
     Optional<UserEntity> getByMail(String mail);
 }

@@ -35,7 +35,7 @@ public class AccountAuditAspect {
         this.userServiceFeignClient = userServiceFeignClient;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.create(..) && args(account)")
+    @AfterReturning(pointcut ="execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.create(..))", returning = "account")
     public void afterCreate(AccountEntity account) {
 
         UserActingDTO userActing = getUserActing();
@@ -45,7 +45,7 @@ public class AccountAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..) && args(uuid)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..))", returning = "account")
     public void afterGetById(AccountEntity account) {
 
         UserActingDTO userActing = getUserActing();
@@ -55,7 +55,7 @@ public class AccountAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..) && args(pageable)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..))", returning="page")
     public void afterGetAll(Page<AccountEntity> page) {
 
         UserActingDTO userActing = getUserActing();
@@ -65,7 +65,7 @@ public class AccountAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.create(..) && args(uuid,updateDate,account)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.update(..)) && args(uuid)")
     public void afterUpdate(UUID uuid) {
 
         UserActingDTO userActing = getUserActing();

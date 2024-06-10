@@ -32,7 +32,7 @@ public class CategoryAuditAspect {
         this.userServiceFeignClient = userServiceFeignClient;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.create(..) && args(category)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.create(..))",returning = "category")
     public void afterCreate(CategoryEntity category) {
 
         UserActingDTO userActing = getUserActing();
@@ -42,7 +42,7 @@ public class CategoryAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.get(..) && args(pageable)")
+    @AfterReturning(value = "execution( * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.get(..))", returning = "page")
     public void afterGetAll(Page<CategoryEntity> page) {
 
         UserActingDTO userActing = getUserActing();

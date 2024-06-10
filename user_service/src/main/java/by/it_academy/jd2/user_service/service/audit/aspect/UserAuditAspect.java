@@ -32,7 +32,7 @@ public class UserAuditAspect {
         this.userHolder = userHolder;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.create(..) && args(user)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.create(..))", returning = "user")
     public void afterCreate(UserEntity user) {
 
         UserActingDTO userActing = getUserActing();
@@ -42,7 +42,7 @@ public class UserAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.get(..) && args(pageable)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.get(..))", returning = "page")
     public void afterGetAll(Page<UserEntity> page) {
 
         UserActingDTO userActing = getUserActing();
@@ -52,7 +52,7 @@ public class UserAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.get(..) && args(uuid)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.get(..))", returning = "user")
     public void afterGetById(UserEntity user) {
 
         UserActingDTO userActing = getUserActing();
@@ -62,7 +62,7 @@ public class UserAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.update(..) && args(uuid,updateDate,user)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.UserServiceImpl.update(..)) && args(uuid)")
     public void afterUpdate(UUID uuid) {
 
         UserActingDTO userActing = getUserActing();

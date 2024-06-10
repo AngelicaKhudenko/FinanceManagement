@@ -3,14 +3,16 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://83.166.234.152:5432/user_service
+    url: jdbc:postgresql://pg_db:5432/user_service
     username: user_service_app
     password: 12345
+  main:
+    allow-bean-definition-overriding: true
 
 app:
   jwt:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
     issuer: ITAcademy
 
-urlVerification: http://user-service/8080/api/v1/cabinet/verification
-auditUrlService: http://audit-service:8080/api/v1/audit
+urlVerification: http://user_service/8080/api/v1/cabinet/verification
+auditUrlService: http://audit_service:8080/api/v1/audit

@@ -34,7 +34,7 @@ public class CabinetAuditAspect {
         this.userService = userService;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.create(..) && args(user)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.create(..))", returning = "user")
     public void afterCreate(UserEntity user) {
 
         UserActingDTO userActing = getUserActing();
@@ -44,7 +44,7 @@ public class CabinetAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.verify(..) && args(verificationDTO)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.verify(..))", returning = "entity")
     public void afterVerify(UserEntity entity) {
 
         UserActingDTO userActing = getUserActing();
@@ -54,7 +54,7 @@ public class CabinetAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.login(..) && args(loginDTO)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.login(..)) && args(loginDTO)")
     public void afterLogin(LoginDTO loginDTO) {
 
         Optional<UserEntity> optional = this.userService.getByMail(loginDTO.getMail());
@@ -71,7 +71,7 @@ public class CabinetAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.getInfoAboutMe(..) && args()")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.getInfoAboutMe(..))", returning = "user")
     public void afterGetInfo(UserEntity user) {
 
         UserActingDTO userActing = getUserActing();

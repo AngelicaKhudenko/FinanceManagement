@@ -31,17 +31,17 @@ public class CurrencyAuditAspect {
         this.userServiceFeignClient = userServiceFeignClient;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.create(..) && args(currency)")
-    public void afterCreate(CurrencyEntity category) {
+    @AfterReturning(pointcut = "execution ( * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.create(..))", returning = "currency")
+    public void afterCreate(CurrencyEntity currency) {
 
         UserActingDTO userActing = getUserActing();
 
-        AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,category.getUuid().toString());
+        AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,currency.getUuid().toString());
 
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.get(..) && args(pageable)")
+    @AfterReturning(pointcut = "execution ( * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.get(..))", returning = "page")
     public void afterGetAll(Page<CurrencyEntity> page) {
 
         UserActingDTO userActing = getUserActing();

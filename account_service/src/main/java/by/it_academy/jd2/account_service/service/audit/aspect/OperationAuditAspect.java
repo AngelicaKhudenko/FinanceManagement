@@ -35,7 +35,7 @@ public class OperationAuditAspect {
         this.userServiceFeignClient = userServiceFeignClient;
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.create(..) && args(operation)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.create(..))", returning = "operation")
     public void afterCreate(OperationEntity operation) {
 
         UserActingDTO userActing = getUserActing();
@@ -45,7 +45,7 @@ public class OperationAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.get(..) && args(pageable)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.get(..))", returning = "page")
     public void afterGetAll(Page<OperationEntity> page) {
 
         UserActingDTO userActing = getUserActing();
@@ -55,7 +55,7 @@ public class OperationAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.create(..) && args(uuid,operationUUID,updateDate,operationCUDTO)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.create(..)) && args(operationUUID)")
     public void afterUpdate(UUID operationUUID) {
 
         UserActingDTO userActing = getUserActing();
@@ -65,7 +65,7 @@ public class OperationAuditAspect {
         this.auditServiceFeignClient.create(audit);
     }
 
-    @AfterReturning("execution * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.delete(..) && args(uuid,operationUUID,updateDate)")
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.OperationServiceImpl.delete(..)) && args(operationUUID)")
     public void afterDelete(UUID operationUUID) {
 
         UserActingDTO userActing = getUserActing();

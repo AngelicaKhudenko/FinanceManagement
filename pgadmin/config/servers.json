@@ -1,0 +1,40 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "account_service",
+      "Group": "account_service",
+      "Port": 5432,
+      "Username": "account_service_app",
+      "Host": "pg_db",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    },
+    "2": {
+      "Name": "audit_service_db",
+      "Group": "audit_service",
+      "Port": 5432,
+      "Username": "audit_service_app",
+      "Host": "pg_db",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    },
+    "3": {
+      "Name": "classifier_service_db",
+      "Group": "classifier_service",
+      "Port": 5432,
+      "Username": "classifier_service_app",
+      "Host": "pg_db",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    },
+    "4": {
+      "Name": "user_service_db",
+      "Group": "user_service",
+      "Port": 5432,
+      "Username": "user_service_app",
+      "Host": "pg_db",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    }
+  }
+}

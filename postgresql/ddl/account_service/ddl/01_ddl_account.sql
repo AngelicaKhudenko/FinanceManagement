@@ -1,3 +1,7 @@
+\c account_service
+
+CREATE SCHEMA app AUTHORIZATION account_service_app;
+
 CREATE TABLE app.account
 (
     id uuid NOT NULL,

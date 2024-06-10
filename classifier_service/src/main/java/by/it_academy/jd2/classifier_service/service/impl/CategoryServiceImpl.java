@@ -1,6 +1,7 @@
 package by.it_academy.jd2.classifier_service.service.impl;
 
 import by.it_academy.jd2.classifier_service.core.dto.CategoryCUDTO;
+import by.it_academy.jd2.classifier_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.classifier_service.model.CategoryEntity;
 import by.it_academy.jd2.classifier_service.repository.ICategoryRepository;
 import by.it_academy.jd2.classifier_service.service.api.ICategoryService;
@@ -54,7 +55,7 @@ public class CategoryServiceImpl implements ICategoryService {
         Optional<CategoryEntity> optional = this.categoryRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new IllegalArgumentException("Категория с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid","Категория с таким id отсутствует");
         }
 
         return optional.get();

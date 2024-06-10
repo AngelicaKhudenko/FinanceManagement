@@ -3,6 +3,7 @@ package by.it_academy.jd2.account_service.service.impl;
 import by.it_academy.jd2.account_service.core.dto.CategoryDTO;
 import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.dto.OperationCUDTO;
+import by.it_academy.jd2.account_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.account_service.service.feign.ICategoryServiceFeignClient;
 import by.it_academy.jd2.account_service.service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
@@ -59,7 +60,7 @@ public class OperationServiceImpl implements IOperationService {
         CategoryDTO categoryDTO = this.categoryServiceFeignClient.get("Bearer " + token, category);
 
         if (currencyDTO == null || categoryDTO == null) {
-            throw new IllegalArgumentException("Ошибка при обработке токена");
+            throw new IllegalStateException("Ошибка при обработке токена");
         }
 
         OperationEntity entity = this.conversionService.convert(operation,OperationEntity.class);
@@ -86,7 +87,7 @@ public class OperationServiceImpl implements IOperationService {
         checkAccount(uuid);
 
         if (updateDate == null) {
-            throw new IllegalArgumentException("Не передана дата прошлого обновления");
+            throw new FieldsIncorrectException("dt_update","Не передана дата прошлого обновления");
         }
 
         OperationEntity operation = get(operationUUID);
@@ -114,7 +115,7 @@ public class OperationServiceImpl implements IOperationService {
         OperationEntity operation = get(operationUUID);
 
         if (updateDate == null) {
-            throw new IllegalArgumentException("Не передана дата прошлого обновления");
+            throw new FieldsIncorrectException("dt_update","Не передана дата прошлого обновления");
         }
 
         Instant instant = Instant.ofEpochMilli(updateDate);
@@ -130,26 +131,26 @@ public class OperationServiceImpl implements IOperationService {
     private void checkAccount (UUID uuid) {
 
         if (uuid == null) {
-            throw new IllegalArgumentException("Не передан идентификатор счета");
+            throw new FieldsIncorrectException("uuid","Не передан идентификатор счета");
         }
 
         AccountEntity account = this.accountService.get(uuid);
 
         if (account == null) {
-            throw new IllegalArgumentException("Счета с таким id не существует");
+            throw new FieldsIncorrectException("uuid","Счета с таким id не существует");
         }
     }
 
     private OperationEntity get(UUID operationUUID) {
 
         if (operationUUID == null) {
-            throw new IllegalArgumentException("Не передан идентификатор операции");
+            throw new FieldsIncorrectException("uuid_operation","Не передан идентификатор операции");
         }
 
         Optional<OperationEntity> optional = this.operationRepository.findById(operationUUID);
 
         if (optional.isEmpty()) {
-            throw new IllegalArgumentException("Операция с таким id не зарегистрирована");
+            throw new FieldsIncorrectException("uuid_operation","Операция с таким id не зарегистрирована");
         }
 
         return optional.get();

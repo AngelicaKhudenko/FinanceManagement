@@ -2,6 +2,7 @@ package by.it_academy.jd2.audit_service.service.impl;
 
 import by.it_academy.jd2.audit_service.core.dto.AuditCUDTO;
 import by.it_academy.jd2.audit_service.core.enums.ETypeEssence;
+import by.it_academy.jd2.audit_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.audit_service.model.AuditEntity;
 import by.it_academy.jd2.audit_service.repository.IAuditRepository;
 import by.it_academy.jd2.audit_service.service.api.IAuditService;
@@ -39,7 +40,7 @@ public class AuditServiceImpl implements IAuditService {
     public void create(AuditCUDTO audit) {
 
         if (ETypeEssence.getByName(audit.getType().name()).isEmpty()) {
-            throw new IllegalArgumentException("Переданы некорректные значения констант");
+            throw new FieldsIncorrectException("type","Переданы некорректные значения констант");
         }
 
         AuditEntity entity = this.conversionService.convert(audit, AuditEntity.class);
@@ -58,7 +59,7 @@ public class AuditServiceImpl implements IAuditService {
         Optional<AuditEntity> optional = this.auditRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new IllegalArgumentException("Действие с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid","Действие с таким id отсутствует");
         }
 
         return optional.get();

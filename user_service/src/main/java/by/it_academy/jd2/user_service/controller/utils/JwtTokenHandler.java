@@ -2,6 +2,7 @@ package by.it_academy.jd2.user_service.controller.utils;
 
 import by.it_academy.jd2.user_service.config.properties.JWTProperty;
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
+import by.it_academy.jd2.user_service.core.exceptions.NoTokenException;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
@@ -68,21 +69,11 @@ public class JwtTokenHandler {
 
     public boolean validate(String token) {
 
-        try {
-            Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException ex) {
-            //logger.error("Invalid JWT signature - {}", ex.getMessage());
-        } catch (MalformedJwtException ex) {
-            //logger.error("Invalid JWT token - {}", ex.getMessage());
-        } catch (ExpiredJwtException ex) {
-            //logger.error("Expired JWT token - {}", ex.getMessage());
-        } catch (UnsupportedJwtException ex) {
-            //logger.error("Unsupported JWT token - {}", ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            //logger.error("JWT claims string is empty - {}", ex.getMessage());
+        if (token == null || token.isBlank() || token.isEmpty()) {
+            throw new NoTokenException();
         }
 
-        return false;
+        Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
+        return true;
     }
 }

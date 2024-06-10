@@ -4,6 +4,7 @@ import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
 import by.it_academy.jd2.user_service.core.enums.EUserStatus;
+import by.it_academy.jd2.user_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.model.VerificationEntity;
 import by.it_academy.jd2.user_service.repository.IVerificationRepository;
@@ -82,19 +83,19 @@ public class CabinetServiceImpl implements ICabinetService{
         Optional<VerificationEntity> optional = this.verificationRepository.findById(verificationDTO.getMail());
 
         if (optional.isEmpty()) {
-            throw new IllegalArgumentException("Неверный код авторизации");
+            throw new FieldsIncorrectException("mail","Неверный адрес электронной почты");
         }
 
         VerificationEntity verification = optional.get();
 
         if (!verificationDTO.getCode().equals(verification.getCode())) {
-            throw new IllegalArgumentException("Неверный код авторизации");
+            throw new FieldsIncorrectException("code","Неверный код авторизации");
         }
 
         Optional<UserEntity> optionalUser = this.userService.getByMail(verification.getMail());
 
         if (optionalUser.isEmpty()) {
-            throw new IllegalStateException("Ошибка при поиске пользователя. Пользователь с таким id отсутствует");
+            throw new FieldsIncorrectException("mail","Неверный адрес электронной почты");
         }
 
         UserEntity user = optionalUser.get();
@@ -112,7 +113,7 @@ public class CabinetServiceImpl implements ICabinetService{
         Optional<UserEntity> optional = this.userService.getByMail(mail);
 
         if (optional.isEmpty()) {
-            throw new IllegalArgumentException("Пользователь с указанной почтой отсутствует");
+            throw new FieldsIncorrectException("mail","Пользователь с указанной почтой отсутствует");
         }
 
         UserEntity entity = optional.get();

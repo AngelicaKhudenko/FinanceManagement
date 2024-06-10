@@ -2,6 +2,7 @@ package by.it_academy.jd2.account_service.service.impl;
 
 import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
+import by.it_academy.jd2.account_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.account_service.service.feign.ICabinetServiceFeignClient;
 import by.it_academy.jd2.account_service.service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
@@ -51,7 +52,7 @@ public class AccountServiceImpl implements IAccountService {
     public AccountEntity create(AccountCUDTO account) {
 
         if (EAccountType.getByName(account.getType().name()).isEmpty()) {
-            throw new IllegalArgumentException("Переданы некорректные значения констант");
+            throw new FieldsIncorrectException("type","Переданы некорректные значения констант");
         }
 
         UUID currency = account.getCurrency();
@@ -62,7 +63,7 @@ public class AccountServiceImpl implements IAccountService {
         CurrencyDTO currencyDTO = this.currencyServiceFeignClient.get("Bearer " + token, currency);
 
         if (currencyDTO == null) {
-            throw new IllegalArgumentException("Ошибка при обработке токена");
+            throw new IllegalStateException("Ошибка при обработке токена");
         }
 
         AccountEntity entity = this.conversionService.convert(account, AccountEntity.class);
@@ -84,7 +85,7 @@ public class AccountServiceImpl implements IAccountService {
         Optional<AccountEntity> optional = this.accountRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new IllegalArgumentException("Счет с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid","Счет с таким id отсутствует");
         }
 
         return optional.get();
@@ -103,21 +104,21 @@ public class AccountServiceImpl implements IAccountService {
     public AccountEntity update(UUID uuid, Long updateDate, AccountCUDTO account) {
 
         if (uuid == null) {
-            throw new IllegalArgumentException("Не передан id");
+            throw new FieldsIncorrectException("uuid","Не передан id");
         }
 
         if (updateDate == null) {
-            throw new IllegalArgumentException("Не передана дата прошлого обновления");
+            throw new FieldsIncorrectException("dt_update","Не передана дата прошлого обновления");
         }
 
         if (EAccountType.getByName(account.getType().name()).isEmpty()) {
-            throw new IllegalArgumentException("Переданы некорректные значения констант");
+            throw new FieldsIncorrectException("type","Переданы некорректные значения констант");
         }
 
         Optional<AccountEntity> optional = this.accountRepository.findById(uuid);
 
         if (optional.isEmpty()) {
-            throw new IllegalArgumentException("Счет с таким id не зарегистрирвоан");
+            throw new FieldsIncorrectException("uuid","Счет с таким id не зарегистрирвоан");
         }
 
         AccountEntity entity = optional.get();

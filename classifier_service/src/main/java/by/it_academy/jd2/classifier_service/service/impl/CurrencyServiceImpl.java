@@ -1,6 +1,7 @@
 package by.it_academy.jd2.classifier_service.service.impl;
 
 import by.it_academy.jd2.classifier_service.core.dto.CurrencyCUDTO;
+import by.it_academy.jd2.classifier_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.classifier_service.model.CurrencyEntity;
 import by.it_academy.jd2.classifier_service.repository.ICurrencyRepository;
 import by.it_academy.jd2.classifier_service.service.api.ICurrencyService;
@@ -54,7 +55,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         Optional<CurrencyEntity> optional = this.currencyRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new IllegalArgumentException("Валюта с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid","Валюта с таким id отсутствует");
         }
 
         return optional.get();

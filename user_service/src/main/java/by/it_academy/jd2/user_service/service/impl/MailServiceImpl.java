@@ -48,7 +48,7 @@ public class MailServiceImpl implements IMailService {
         Optional<MailEntity> optional = this.mailRepository.findById(entity.getUuid());
 
         if (optional.isEmpty()) {
-            throw new IllegalStateException("Письмо с таким id не зарегистрирвоан");
+            throw new IllegalStateException("Письмо с таким id не зарегистрировано");
         }
 
         MailEntity entityDB = optional.get();

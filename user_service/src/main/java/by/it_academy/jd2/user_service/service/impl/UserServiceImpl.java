@@ -2,6 +2,7 @@ package by.it_academy.jd2.user_service.service.impl;
 
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
 import by.it_academy.jd2.user_service.core.enums.EUserStatus;
+import by.it_academy.jd2.user_service.core.exceptions.FieldsIncorrectException;
 import by.it_academy.jd2.user_service.repository.IUserRepository;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
@@ -40,16 +41,18 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserEntity create(UserCUDTO user) {
 
-        if (EUserRole.getByName(user.getRole().name()).isEmpty() ||
-                EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+        if (EUserRole.getByName(user.getRole().name()).isEmpty()) {
+            throw new FieldsIncorrectException("role","Переданы некорректные значения констант");
+        }
 
-            throw new IllegalArgumentException("Переданы некорректные значения констант");
+        if (EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+            throw new FieldsIncorrectException("status","Переданы некорректные значения констант");
         }
 
         Optional<UserEntity> optional = getByMail(user.getMail());
 
         if (optional.isPresent()) {
-            throw new IllegalArgumentException("Пользователь с таким адресом электронной почты уже существует");
+            throw new FieldsIncorrectException("mail","Пользователь с таким адресом электронной почты уже существует");
         }
 
         UserEntity entity = this.conversionService.convert(user,UserEntity.class);
@@ -76,7 +79,7 @@ public class UserServiceImpl implements IUserService {
         Optional<UserEntity> optional = this.userRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new IllegalArgumentException("Пользователь с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid","Пользователь с таким id отсутствует");
         }
 
         return optional.get();
@@ -87,23 +90,25 @@ public class UserServiceImpl implements IUserService {
     public void update(UUID uuid, Long updateDate, UserCUDTO user) {
 
         if (uuid == null) {
-            throw new IllegalArgumentException("Не передан id");
+            throw new FieldsIncorrectException("uuid","Не передан id");
         }
 
         if (updateDate == null) {
-            throw new IllegalArgumentException("Не передана дата прошлого обновления");
+            throw new FieldsIncorrectException("dt_update","Не передана дата прошлого обновления");
         }
 
-        if (EUserRole.getByName(user.getRole().name()).isEmpty() ||
-                EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+        if (EUserRole.getByName(user.getRole().name()).isEmpty()) {
+            throw new FieldsIncorrectException("role","Переданы некорректные значения констант");
+        }
 
-            throw new IllegalArgumentException("Переданы некорректные значения констант");
+        if (EUserStatus.getByName(user.getStatus().name()).isEmpty()) {
+            throw new FieldsIncorrectException("status","Переданы некорректные значения констант");
         }
 
         Optional<UserEntity> optional = this.userRepository.findById(uuid);
 
         if (optional.isEmpty()) {
-            throw new IllegalArgumentException("Пользователь с таким id не зарегистрирвоан");
+            throw new FieldsIncorrectException("uuid","Пользователь с таким id не зарегистрирвоан");
         }
 
         UserEntity entity = optional.get();
@@ -131,7 +136,7 @@ public class UserServiceImpl implements IUserService {
         Optional<UserEntity> optional = this.userRepository.findById(entity.getUuid());
 
         if (optional.isEmpty()) {
-            throw new IllegalStateException("Пользователь с таким id не зарегистрирвоан");
+            throw new FieldsIncorrectException("uuid","Пользователь с таким id не зарегистрирвоан");
         }
 
         UserEntity entityDB = optional.get();
@@ -148,7 +153,7 @@ public class UserServiceImpl implements IUserService {
     public Optional<UserEntity> getByMail (String mail) {
 
         if (mail == null || mail.isBlank()) {
-            throw new IllegalStateException("Переданный адрес электронной почты пуст");
+            throw new FieldsIncorrectException("mail","Переданный адрес электронной почты пуст");
         }
 
         UserEntity entity = this.userRepository.findByMail(mail);

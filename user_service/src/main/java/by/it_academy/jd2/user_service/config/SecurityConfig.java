@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .requestMatchers("/users/**").hasAnyRole("ADMIN")
                 .requestMatchers("/cabinet/me").authenticated()
 
-                .requestMatchers("/cabinet/registration", "/cabinet/verification","/cabinet/login").permitAll()
+                .requestMatchers("/cabinet/registration","/cabinet/verification","/cabinet/login").permitAll()
 
                 .anyRequest().authenticated()
         );

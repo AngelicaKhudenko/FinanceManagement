@@ -8,6 +8,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtHandler = jwtHandler;
         this.userService = userService;
     }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -56,13 +58,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
         UUID uuid = UUID.fromString(jwtHandler.getUUID(token));
         UserEntity entity = this.userService.get(uuid);
+
+        if (entity == null) {
+
+            chain.doFilter(request, response);
+            return;
+        }
+
         UserDetails userDetails = new UserDetailsExpanded(entity);
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null,
-                userDetails == null ?
-                        List.of() : userDetails.getAuthorities()
+                userDetails, null, userDetails.getAuthorities()
         );
 
         authentication.setDetails(

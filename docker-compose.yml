@@ -10,7 +10,7 @@ services:
       - finance-network
   pg_db:
     build: postgresql
-    image: postgresql-finance:1.0.5
+    image: postgresql-finance:1.0.1
     environment:
       POSTGRES_USER: finance_admin
       POSTGRES_PASSWORD: 123
@@ -18,7 +18,7 @@ services:
       - finance-network
   pgadmin:
     build: pgadmin
-    image: pgadmin-finance:1.0.2
+    image: pgadmin_finance:1.0.1
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@finance.com
       PGADMIN_DEFAULT_PASSWORD: finance
@@ -26,33 +26,38 @@ services:
       - 82:80
     networks:
       - finance-network
-  account_service:
+  account-service:
     build: account_service
-    image: account_service_finance:1.0.2
+    image: account_service_finance:1.0.1
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
-  audit_service:
+  audit-service:
     build: audit_service
-    image: audit_service_finance:1.0.7
+    image: audit_service_finance:1.0.1
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
-  classifier_service:
+  classifier-service:
     build: classifier_service
     image: classifier_service_finance:1.0.1
     networks:
       - finance-network
-  user_service:
+  user-service:
     build: user_service
-    image: user_service_finance:1.0.23
+    image: user_service_finance:1.0.1
+    environment:
+      MAIL_LOGIN: ${MAIL_LOGIN}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER: ${SERVER}
     networks:
       - finance-network
   proxy:
     build: proxy
-    image: proxy_finance:1.0.10
+    image: proxy_finance:1.0.1
     ports:
       - 80:80
     networks:

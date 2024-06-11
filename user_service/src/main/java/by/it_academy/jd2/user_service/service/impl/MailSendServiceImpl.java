@@ -26,6 +26,6 @@ public class MailSendServiceImpl implements IMailSendService {
         message.setSubject(entity.getTopic());
         message.setText(entity.getText());
 
-        javaMailSender.send(message);
+        this.javaMailSender.send(message);
     }
 }

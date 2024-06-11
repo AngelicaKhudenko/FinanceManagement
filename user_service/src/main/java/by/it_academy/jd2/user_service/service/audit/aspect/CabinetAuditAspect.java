@@ -34,12 +34,12 @@ public class CabinetAuditAspect {
         this.userService = userService;
     }
 
-    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.create(..))", returning = "user")
-    public void afterCreate(UserEntity user) {
+    @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.create(..))", returning = "entity")
+    public void afterCreate(UserEntity entity) {
 
-        UserActingDTO userActing = getUserActing();
+        UserActingDTO userActing = getUserActing(entity);
 
-        AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,user.getUuid().toString());
+        AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,entity.getUuid().toString());
 
         this.auditServiceFeignClient.create(audit);
     }
@@ -47,7 +47,7 @@ public class CabinetAuditAspect {
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.verify(..))", returning = "entity")
     public void afterVerify(UserEntity entity) {
 
-        UserActingDTO userActing = getUserActing();
+        UserActingDTO userActing = getUserActing(entity);
 
         AuditCUDTO audit = getAuditCUDTO(this.verifyText,userActing,entity.getUuid().toString());
 
@@ -64,7 +64,7 @@ public class CabinetAuditAspect {
 
         UserEntity user = optional.get();
 
-        UserActingDTO userActing = getUserActing();
+        UserActingDTO userActing = getUserActing(user);
 
         AuditCUDTO audit = getAuditCUDTO(this.loginText,userActing,user.getUuid().toString());
 
@@ -85,11 +85,20 @@ public class CabinetAuditAspect {
 
         UserDetailsExpanded userDetailsExpanded = this.userHolder.getUser();
 
-        if (userDetailsExpanded == null) {
-            return null;
-        }
-
         UserEntity entity = userDetailsExpanded.getUser();
+
+        UserActingDTO userActing = UserActingDTO
+                .builder()
+                .uuid(entity.getUuid())
+                .mail(entity.getMail())
+                .fio(entity.getFio())
+                .role(entity.getRole())
+                .build();
+
+        return userActing;
+    }
+
+    private UserActingDTO getUserActing(UserEntity entity) {
 
         UserActingDTO userActing = UserActingDTO
                 .builder()

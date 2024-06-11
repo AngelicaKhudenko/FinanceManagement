@@ -1,5 +1,6 @@
 package by.it_academy.jd2.user_service.service.impl;
 
+import by.it_academy.jd2.user_service.config.properties.URLProperty;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
@@ -31,6 +32,7 @@ public class CabinetServiceImpl implements ICabinetService{
     private final JwtTokenHandler jwtHandler;
     private final ConversionService conversionService;
     private final UserHolder userHolder;
+    private final URLProperty urlProperty;
 
     public CabinetServiceImpl(IUserService userService,
                               IMailService mailService,
@@ -38,7 +40,8 @@ public class CabinetServiceImpl implements ICabinetService{
                               PasswordEncoder encoder,
                               JwtTokenHandler jwtHandler,
                               ConversionService conversionService,
-                              UserHolder userHolder) {
+                              UserHolder userHolder,
+                              URLProperty urlProperty) {
 
         this.userService = userService;
         this.mailService = mailService;
@@ -47,6 +50,7 @@ public class CabinetServiceImpl implements ICabinetService{
         this.jwtHandler = jwtHandler;
         this.conversionService = conversionService;
         this.userHolder = userHolder;
+        this.urlProperty = urlProperty;
     }
 
     @Transactional
@@ -69,7 +73,7 @@ public class CabinetServiceImpl implements ICabinetService{
 
         this.verificationRepository.saveAndFlush(verificationEntity);
 
-        MailDTO mail = generateVerificationMail(user.getMail(),verificationCode);
+        MailDTO mail = generateVerificationMail(user.getMail(),verificationCode, user.getFio());
 
         this.mailService.create(mail);
 
@@ -144,20 +148,20 @@ public class CabinetServiceImpl implements ICabinetService{
         return uuid.toString().replace("-","");
     }
 
-    private MailDTO generateVerificationMail(String login, String verificationCode) {
+    private MailDTO generateVerificationMail(String login, String verificationCode, String fio) {
 
         StringBuilder builder = new StringBuilder();
 
         builder.append("Здравствуйте, ");
-        builder.append(login);
-        builder.append(" ");
-        builder.append("Мы рады, что вы стали пользователем нашего приложения!");
-        builder.append(" ");
-        builder.append("Для верификации вашего аккаунта перейдите по ссылке:");
-        builder.append(" ");
-        builder.append("${urlVerification}");
-        builder.append("Ваш код верификации: ");
+        builder.append(fio);
+        builder.append("! Мы рады, что вы стали пользователем нашего приложения! Для верификации вашего аккаунта перейдите по ссылке: ");
+        builder.append("http://");
+        builder.append(System.getenv("SERVER"));
+        builder.append(this.urlProperty.getVerification());
+        builder.append("?code=");
         builder.append(verificationCode);
+        builder.append("&mail=");
+        builder.append(login);
 
         String text = builder.toString();
 

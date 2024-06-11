@@ -14,6 +14,6 @@ public class UserHolder {
             return (UserDetailsExpanded) principal;
         }
 
-        return null;
+        throw new IllegalStateException("Ошибка при получении данных о пользователе из токена");
     }
 }

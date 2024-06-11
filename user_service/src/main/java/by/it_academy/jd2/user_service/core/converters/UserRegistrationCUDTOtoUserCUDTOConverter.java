@@ -1,4 +1,4 @@
-package by.it_academy.jd2.user_service.service.converter;
+package by.it_academy.jd2.user_service.core.converters;
 
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;
 import by.it_academy.jd2.user_service.core.dto.UserRegistrationCUDTO;
@@ -13,7 +13,7 @@ public class UserRegistrationCUDTOtoUserCUDTOConverter implements Converter<User
         UserCUDTO userCUDTO = UserCUDTO
                 .builder()
                 .mail(item.getMail())
-                .fio(item.getMail())
+                .fio(item.getFio())
                 .password(item.getPassword())
                 .build();
 

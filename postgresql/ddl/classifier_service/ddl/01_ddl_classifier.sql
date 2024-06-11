@@ -1,5 +1,6 @@
-CREATE SCHEMA app
-	AUTHORIZATION classifier_service_app;
+\c classifier_service
+
+CREATE SCHEMA app AUTHORIZATION classifier_service_app;
 
 CREATE TABLE app.currency
 (

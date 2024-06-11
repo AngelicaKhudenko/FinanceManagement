@@ -1,4 +1,4 @@
-package by.it_academy.jd2.user_service.service.converter;
+package by.it_academy.jd2.user_service.core.converters;
 
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.core.dto.UserCUDTO;

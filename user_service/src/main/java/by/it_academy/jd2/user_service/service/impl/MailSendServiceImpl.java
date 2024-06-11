@@ -5,7 +5,9 @@ import by.it_academy.jd2.user_service.service.api.IMailSendService;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MailSendServiceImpl implements IMailSendService {
 
     private final JavaMailSender javaMailSender;

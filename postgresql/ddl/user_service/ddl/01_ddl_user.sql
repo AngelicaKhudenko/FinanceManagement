@@ -1,5 +1,6 @@
-CREATE SCHEMA app
-	AUTHORIZATION user_service_app;
+\c user_service
+
+CREATE SCHEMA app AUTHORIZATION user_service_app;
 
 CREATE TABLE app.users
 (

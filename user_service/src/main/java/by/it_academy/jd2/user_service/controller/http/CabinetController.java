@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/cabinet")
+@RequestMapping("/cabinet")
 public class CabinetController {
     private final ICabinetService cabinetService;
     private final ConversionService conversionService;

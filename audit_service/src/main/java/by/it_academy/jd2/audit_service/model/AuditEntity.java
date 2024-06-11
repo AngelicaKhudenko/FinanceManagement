@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table(name="audit",schema = "app")
 public class AuditEntity {
     @Id
-    @Column(name = "id")
+    @Column(name = "id_subject")
     private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime creation;
@@ -19,6 +19,7 @@ public class AuditEntity {
     private String text;
     @Enumerated(EnumType.STRING)
     private ETypeEssence type;
+    @Column(name = "id_object")
     private String id;
 
     public AuditEntity() {

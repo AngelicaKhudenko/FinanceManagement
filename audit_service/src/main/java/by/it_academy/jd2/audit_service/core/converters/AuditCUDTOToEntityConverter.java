@@ -1,4 +1,4 @@
-package by.it_academy.jd2.audit_service.service.converter;
+package by.it_academy.jd2.audit_service.core.converters;
 
 import by.it_academy.jd2.audit_service.core.dto.AuditCUDTO;
 import by.it_academy.jd2.audit_service.model.AuditEntity;

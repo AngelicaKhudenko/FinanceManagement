@@ -3,7 +3,7 @@ package by.it_academy.jd2.user_service.service.audit.aspect;
 import by.it_academy.jd2.user_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.user_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.user_service.service.audit.enums.ETypeEssence;
-import by.it_academy.jd2.user_service.service.audit.feign.IAuditServiceFeignClient;
+import by.it_academy.jd2.user_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
 import by.it_academy.jd2.user_service.controller.token.UserHolder;
@@ -75,6 +75,10 @@ public class UserAuditAspect {
     private UserActingDTO getUserActing() {
 
         UserDetailsExpanded userDetailsExpanded = this.userHolder.getUser();
+
+        if (userDetailsExpanded == null) {
+            return null;
+        }
 
         UserEntity entity = userDetailsExpanded.getUser();
 

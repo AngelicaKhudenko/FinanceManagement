@@ -12,7 +12,6 @@ import lombok.*;
 @NoArgsConstructor
 public class AuditCUDTO {
 
-    @NotNull
     private UserActingDTO user;
     @NotEmpty
     @NotNull

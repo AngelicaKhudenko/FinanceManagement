@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -24,6 +26,8 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
+@Transactional(readOnly = true)
 public class OperationServiceImpl implements IOperationService {
 
     private final ConversionService conversionService;
@@ -46,6 +50,7 @@ public class OperationServiceImpl implements IOperationService {
     }
 
     @Override
+    @Transactional
     public OperationEntity create(UUID uuid, OperationCUDTO operation) {
 
         checkAccount(uuid);
@@ -81,6 +86,7 @@ public class OperationServiceImpl implements IOperationService {
         return this.operationRepository.findAll(pageable);
     }
 
+    @Transactional
     @Override
     public OperationEntity update(UUID uuid, UUID operationUUID, Long updateDate, OperationCUDTO operationCUDTO) {
 
@@ -107,6 +113,7 @@ public class OperationServiceImpl implements IOperationService {
         return this.operationRepository.saveAndFlush(operation);
     }
 
+    @Transactional
     @Override
     public void delete(UUID uuid, UUID operationUUID, Long updateDate) {
 

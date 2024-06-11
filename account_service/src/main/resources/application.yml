@@ -1,13 +1,8 @@
-server:
-  port: 8080
-
 spring:
-  datasource:
-    url: jdbc:postgresql://pg_db:5432/account_service
-    username: account_service_app
-    password: 12345
   main:
     allow-bean-definition-overriding: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
 
 app:
   jwt:
@@ -18,3 +13,4 @@ urlUserService: http://user_service:8080/api/v1/users
 urlCabinetService: http://user_service:8080/api/v1/cabinet
 urlCategoryService: http://classifier_service:8080/api/v1/classifier/operation/category
 urlCurrencyService: http://classifier_service:8080/api/v1/classifier/currency
+auditUrlService: http://audit_service:8080/api/v1/audit

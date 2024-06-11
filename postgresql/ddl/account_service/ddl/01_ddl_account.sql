@@ -43,7 +43,7 @@ CREATE TABLE app.operation
     CONSTRAINT operation_category_not_null CHECK (category IS NOT NULL),
     CONSTRAINT operation_value_operation_not_null CHECK (value_operation IS NOT NULL),
     CONSTRAINT operation_currency_not_null CHECK (currency IS NOT NULL),
-    CONSTRAINT operation_account_fk FOREIGN KEY (account) REFERENCES app.account (uuid)
+    CONSTRAINT operation_account_fk FOREIGN KEY (account) REFERENCES app.account (id)
 );
 
 ALTER TABLE IF EXISTS app.operation

@@ -8,6 +8,12 @@ public class UserHolder {
 
     public UserDetailsExpanded getUser(){
 
-        return (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetailsExpanded) {
+            return (UserDetailsExpanded) principal;
+        }
+
+        return null;
     }
 }

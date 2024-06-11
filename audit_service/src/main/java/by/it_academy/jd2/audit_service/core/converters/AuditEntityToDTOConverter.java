@@ -1,4 +1,4 @@
-package by.it_academy.jd2.audit_service.controller.converter;
+package by.it_academy.jd2.audit_service.core.converters;
 
 import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
 

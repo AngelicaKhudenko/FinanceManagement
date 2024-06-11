@@ -3,7 +3,7 @@ package by.it_academy.jd2.user_service.service.audit.aspect;
 import by.it_academy.jd2.user_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.user_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.user_service.service.audit.enums.ETypeEssence;
-import by.it_academy.jd2.user_service.service.audit.feign.IAuditServiceFeignClient;
+import by.it_academy.jd2.user_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.user_service.core.dto.LoginDTO;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;

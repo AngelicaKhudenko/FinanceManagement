@@ -41,7 +41,7 @@ public class UserController {
 
     @GetMapping
     public PageDTO<UserDTO> get(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                       @RequestParam(value = "size", defaultValue = "20") Integer size) {
+                                @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
 

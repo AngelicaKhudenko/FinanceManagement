@@ -47,10 +47,12 @@ services:
       - finance-network
   user-service:
     build: user_service
-    image: user_service_finance:1.0.1
+    image: user_service_finance:1.0.2
     environment:
       MAIL_LOGIN: ${MAIL_LOGIN}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
+      ADMIN_FIO: ${ADMIN_FIO}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       SPRING_PROFILES_ACTIVE: docker
       SERVER: ${SERVER}
     networks:

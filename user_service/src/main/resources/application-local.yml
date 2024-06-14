@@ -8,4 +8,4 @@ spring:
     password: 12345
 
 url:
-  audit: http://audit-service:8081/api/v1/audit
+  audit: http://localhost:8081/audit

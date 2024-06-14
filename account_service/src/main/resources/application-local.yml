@@ -8,7 +8,7 @@ spring:
     password: 12345
 
 url:
-  users: http://user-service:8084/api/v1/users
-  category: http://classifier-service:8083/api/v1/classifier/operation/category
-  currency: http://classifier-service:8083/api/v1/classifier/currency
-  audit: http://audit-service:8081/api/v1/audit
+  users: http://localhost:8084/users
+  category: http://localhost:8083/category
+  currency: http://localhoste:8083/currency
+  audit: http://localhost:8081/audit

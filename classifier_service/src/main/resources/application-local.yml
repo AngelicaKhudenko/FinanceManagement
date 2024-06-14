@@ -8,5 +8,5 @@ spring:
     password: 12345
 
 url:
-  users: http://user-service:8084/api/v1/users
-  audit: http://audit-service:8081/api/v1/audit
+  users: http://localhost:8084/users
+  audit: http://localhost:8081/audit

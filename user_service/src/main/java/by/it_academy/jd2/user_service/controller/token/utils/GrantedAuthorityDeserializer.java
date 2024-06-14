@@ -13,6 +13,7 @@ public class GrantedAuthorityDeserializer extends JsonDeserializer<SimpleGranted
     public SimpleGrantedAuthority deserialize(JsonParser p,
                                               DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
+
         String authority = p.getValueAsString();
         return new SimpleGrantedAuthority(authority);
     }

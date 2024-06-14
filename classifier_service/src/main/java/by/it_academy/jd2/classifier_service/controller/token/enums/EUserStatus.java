@@ -18,12 +18,7 @@ public enum EUserStatus {
         return description;
     }
 
-    /**
-     * Получение статуса пользователя по его наименованию.
-     * @param name - Наименование статуса пользователя, который необходимо получить.
-     * @return Optional<EUserStatus> - объект Optional, содержащий статус пользователя, если такой статус найден,
-     *         или пустой Optional, если статус с указанным наименованием не найден.
-     */
+
     public static Optional<EUserStatus> getByName(String name){
         for (EUserStatus value:values()){
             if(value.name().equals(name)){

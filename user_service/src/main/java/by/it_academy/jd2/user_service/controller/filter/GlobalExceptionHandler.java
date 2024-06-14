@@ -1,10 +1,6 @@
 package by.it_academy.jd2.user_service.controller.filter;
 
 import by.it_academy.jd2.user_service.core.exceptions.FieldsIncorrectException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.persistence.OptimisticLockException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

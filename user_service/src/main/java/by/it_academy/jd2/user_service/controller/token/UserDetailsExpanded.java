@@ -1,12 +1,9 @@
 package by.it_academy.jd2.user_service.controller.token;
 
-import by.it_academy.jd2.user_service.controller.token.utils.GrantedAuthorityDeserializer;
 import by.it_academy.jd2.user_service.controller.token.utils.GrantedAuthoritySerializer;
 import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.enums.EUserStatus;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

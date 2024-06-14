@@ -1,11 +1,6 @@
 package by.it_academy.jd2.account_service.controller.filter;
 
 import by.it_academy.jd2.account_service.core.exceptions.FieldsIncorrectException;
-import by.it_academy.jd2.account_service.core.exceptions.NoTokenException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.persistence.OptimisticLockException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -99,45 +94,5 @@ public class GlobalExceptionHandler {
         response.put("message", "Сервер не смог корректно обработать запрос. Пожалуйста обратитесь к администратору");
 
         return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Void> handleNoToken(NoTokenException e) {
-
-        logger.log(Level.WARN, "Ошибка авторизации. Не передан токен",e);
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Void> handleSignatureException(SignatureException e) {
-
-        logger.log(Level.WARN, "Ошибка авторизации. Неверный токен",e);
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Void> handleMalformedJwtException(MalformedJwtException e) {
-
-        logger.log(Level.WARN, "Ошибка авторизации. Неверный токен",e);
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Void> handleExpiredJwtException(ExpiredJwtException e) {
-
-        logger.log(Level.WARN, "Ошибка авторизации. Токен просрочен",e);
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Void> handleUnsupportedJwtException(UnsupportedJwtException e) {
-
-        logger.log(Level.WARN, "Ошибка авторизации. Неверный токен",e);
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

@@ -1,7 +1,6 @@
 package by.it_academy.jd2.classifier_service.controller.http;
 
 import by.it_academy.jd2.classifier_service.core.dto.*;
-import by.it_academy.jd2.classifier_service.model.CategoryEntity;
 import by.it_academy.jd2.classifier_service.model.CurrencyEntity;
 import by.it_academy.jd2.classifier_service.service.api.ICurrencyService;
 import org.springframework.core.convert.ConversionService;

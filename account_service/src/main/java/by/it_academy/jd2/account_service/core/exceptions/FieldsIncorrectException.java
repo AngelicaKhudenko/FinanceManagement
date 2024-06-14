@@ -6,12 +6,11 @@ public class FieldsIncorrectException extends IllegalArgumentException{
         return field;
     }
 
-    private String field;
+    private final String field;
 
     public FieldsIncorrectException(String field, String message) {
 
         super(message);
         this.field = field;
     }
-
 }

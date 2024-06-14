@@ -32,5 +32,4 @@ public class OperationDTO {
     private UUID category;
     private Double value;
     private UUID currency;
-
 }

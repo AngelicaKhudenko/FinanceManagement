@@ -1,7 +1,13 @@
 package by.it_academy.jd2.user_service.controller.token;
 
+import by.it_academy.jd2.user_service.controller.token.utils.GrantedAuthorityDeserializer;
+import by.it_academy.jd2.user_service.controller.token.utils.GrantedAuthoritySerializer;
+import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.core.enums.EUserStatus;
-import by.it_academy.jd2.user_service.model.UserEntity;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,12 +18,13 @@ import java.util.UUID;
 
 public class UserDetailsExpanded implements UserDetails {
 
-    private final UserEntity user;
+    private final UserDTO user;
 
-    public UserDetailsExpanded(UserEntity user) {
+    public UserDetailsExpanded(@JsonProperty("user")UserDTO user) {
         this.user = user;
     }
 
+    @JsonSerialize(using = GrantedAuthoritySerializer.class)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -26,7 +33,7 @@ public class UserDetailsExpanded implements UserDetails {
         return Collections.singleton(authority);
     }
 
-    public UserEntity getUser() {
+    public UserDTO getUser() {
 
         return this.user;
     }
@@ -34,7 +41,7 @@ public class UserDetailsExpanded implements UserDetails {
     @Override
     public String getPassword() {
 
-        return this.user.getPassword();
+        return null;
     }
 
     public UUID getUUID() {

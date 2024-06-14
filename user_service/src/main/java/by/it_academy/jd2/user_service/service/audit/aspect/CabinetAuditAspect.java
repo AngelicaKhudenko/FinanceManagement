@@ -1,5 +1,7 @@
 package by.it_academy.jd2.user_service.service.audit.aspect;
 
+import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
+import by.it_academy.jd2.user_service.core.dto.UserDTO;
 import by.it_academy.jd2.user_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.user_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.user_service.service.audit.enums.ETypeEssence;
@@ -7,7 +9,6 @@ import by.it_academy.jd2.user_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.user_service.core.dto.LoginDTO;
 import by.it_academy.jd2.user_service.model.UserEntity;
 import by.it_academy.jd2.user_service.service.api.IUserService;
-import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
 import by.it_academy.jd2.user_service.controller.token.UserHolder;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -85,14 +86,14 @@ public class CabinetAuditAspect {
 
         UserDetailsExpanded userDetailsExpanded = this.userHolder.getUser();
 
-        UserEntity entity = userDetailsExpanded.getUser();
+        UserDTO user = userDetailsExpanded.getUser();
 
         UserActingDTO userActing = UserActingDTO
                 .builder()
-                .uuid(entity.getUuid())
-                .mail(entity.getMail())
-                .fio(entity.getFio())
-                .role(entity.getRole())
+                .uuid(user.getUuid())
+                .mail(user.getMail())
+                .fio(user.getFio())
+                .role(user.getRole())
                 .build();
 
         return userActing;

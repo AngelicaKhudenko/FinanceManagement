@@ -2,6 +2,10 @@ package by.it_academy.jd2.audit_service.controller.token;
 
 import by.it_academy.jd2.audit_service.controller.token.dto.UserDTO;
 import by.it_academy.jd2.audit_service.controller.token.enums.EUserStatus;
+import by.it_academy.jd2.audit_service.controller.token.utils.GrantedAuthorityDeserializer;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,16 +18,24 @@ public class UserDetailsExpanded implements UserDetails {
 
     private final UserDTO user;
 
-    public UserDetailsExpanded(UserDTO user) {
+    @JsonCreator
+    public UserDetailsExpanded(@JsonProperty("user")UserDTO user) {
         this.user = user;
     }
 
+
+    @JsonDeserialize(using = GrantedAuthorityDeserializer.class)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+this.user.getRole().name());
 
         return Collections.singleton(authority);
+    }
+
+    public UserDTO getUser() {
+
+        return this.user;
     }
 
     @Override

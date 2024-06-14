@@ -2,7 +2,6 @@ package by.it_academy.jd2.user_service.controller.utils;
 
 import by.it_academy.jd2.user_service.config.properties.JWTProperty;
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
-import by.it_academy.jd2.user_service.model.UserEntity;
 import io.jsonwebtoken.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,10 +22,6 @@ public class JwtTokenHandler {
         this.property = property;
     }
 
-    public String generateAccessToken(UserEntity user) {
-
-        return generateAccessToken(user.getUuid(),user.getRole());
-    }
 
     public String generateAccessToken(UUID uuid, EUserRole role) {
 

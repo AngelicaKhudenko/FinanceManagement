@@ -9,8 +9,8 @@ app:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
     issuer: ITAcademy
 
-urlUserService: http://user_service:8080/api/v1/users
-urlCabinetService: http://user_service:8080/api/v1/cabinet
-urlCategoryService: http://classifier_service:8080/api/v1/classifier/operation/category
-urlCurrencyService: http://classifier_service:8080/api/v1/classifier/currency
-auditUrlService: http://audit_service:8080/api/v1/audit
+urlUserService: http://user-service:8080/users
+urlCabinetService: http://user-service:8080/cabinet
+urlCategoryService: http://classifier-service:8080/category
+urlCurrencyService: http://classifier-service:8080/currency
+auditUrlService: http://audit-service:8080/audit

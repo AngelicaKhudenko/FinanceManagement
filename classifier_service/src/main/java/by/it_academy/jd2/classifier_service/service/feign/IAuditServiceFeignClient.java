@@ -1,4 +1,4 @@
-package by.it_academy.jd2.classifier_service.service.audit.feign;
+package by.it_academy.jd2.classifier_service.service.feign;
 
 import by.it_academy.jd2.classifier_service.service.audit.dto.AuditCUDTO;
 import org.springframework.cloud.openfeign.FeignClient;

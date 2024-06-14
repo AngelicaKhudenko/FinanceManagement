@@ -6,7 +6,7 @@ import by.it_academy.jd2.classifier_service.model.CurrencyEntity;
 import by.it_academy.jd2.classifier_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.classifier_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.classifier_service.service.audit.enums.ETypeEssence;
-import by.it_academy.jd2.classifier_service.service.audit.feign.IAuditServiceFeignClient;
+import by.it_academy.jd2.classifier_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.classifier_service.service.feign.IUserServiceFeignClient;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;

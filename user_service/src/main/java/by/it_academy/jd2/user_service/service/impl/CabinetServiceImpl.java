@@ -1,6 +1,7 @@
 package by.it_academy.jd2.user_service.service.impl;
 
 import by.it_academy.jd2.user_service.config.properties.URLProperty;
+import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
 import by.it_academy.jd2.user_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.user_service.core.dto.*;
 import by.it_academy.jd2.user_service.core.enums.EUserRole;
@@ -12,7 +13,6 @@ import by.it_academy.jd2.user_service.repository.IVerificationRepository;
 import by.it_academy.jd2.user_service.service.api.ICabinetService;
 import by.it_academy.jd2.user_service.service.api.IMailService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
-import by.it_academy.jd2.user_service.controller.token.UserDetailsExpanded;
 import by.it_academy.jd2.user_service.controller.token.UserHolder;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -130,7 +130,7 @@ public class CabinetServiceImpl implements ICabinetService{
             throw new IllegalArgumentException("Неверный логин или пароль");
         }
 
-        return jwtHandler.generateAccessToken(entity);
+        return jwtHandler.generateAccessToken(entity.getUuid(),entity.getRole());
     }
 
     @Override

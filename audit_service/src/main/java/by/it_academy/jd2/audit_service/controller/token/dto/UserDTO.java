@@ -1,9 +1,11 @@
 package by.it_academy.jd2.audit_service.controller.token.dto;
 
+import by.it_academy.jd2.audit_service.controller.utils.LocalDateTimeDeserializer;
 import by.it_academy.jd2.audit_service.controller.utils.LocalDateTimeSerializer;
 import by.it_academy.jd2.audit_service.controller.token.enums.EUserRole;
 import by.it_academy.jd2.audit_service.controller.token.enums.EUserStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
@@ -21,10 +23,12 @@ public class UserDTO {
 
     @JsonProperty("dt_create")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime creation;
 
     @JsonProperty("dt_update")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime update;
 
     private String mail;

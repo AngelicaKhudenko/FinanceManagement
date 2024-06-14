@@ -35,7 +35,7 @@ services:
       - finance-network
   audit-service:
     build: audit_service
-    image: audit_service_finance:1.0.1
+    image: audit_service_finance:1.0.4
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
@@ -43,11 +43,13 @@ services:
   classifier-service:
     build: classifier_service
     image: classifier_service_finance:1.0.1
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
   user-service:
     build: user_service
-    image: user_service_finance:1.0.2
+    image: user_service_finance:1.0.1
     environment:
       MAIL_LOGIN: ${MAIL_LOGIN}
       MAIL_PASSWORD: ${MAIL_PASSWORD}

@@ -8,5 +8,3 @@ app:
     issuer: ITAcademy
 
 verification: /api/v1/cabinet/verification
-
-auditUrlService: http://audit-service:8080/audit

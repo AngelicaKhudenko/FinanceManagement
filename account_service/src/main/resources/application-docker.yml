@@ -6,3 +6,9 @@ spring:
     url: jdbc:postgresql://pg_db:5432/account_service
     username: account_service_app
     password: 12345
+
+url:
+  users: http://user-service:8080/users
+  category: http://classifier-service:8080/category
+  currency: http://classifier-service:8080/currency
+  audit: http://audit-service:8080/audit

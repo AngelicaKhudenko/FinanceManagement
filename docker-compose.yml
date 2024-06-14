@@ -10,7 +10,7 @@ services:
       - finance-network
   pg_db:
     build: postgresql
-    image: postgresql-finance:1.0.1
+    image: postgresql-finance:1.0.4
     environment:
       POSTGRES_USER: finance_admin
       POSTGRES_PASSWORD: 123
@@ -35,7 +35,7 @@ services:
       - finance-network
   audit-service:
     build: audit_service
-    image: audit_service_finance:1.0.4
+    image: audit_service_finance:1.0.1
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:

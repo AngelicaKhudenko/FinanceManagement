@@ -14,6 +14,7 @@ public interface IAccountService {
     AccountEntity get(UUID uuid);
 
     AccountEntity update(UUID uuid, Long updateDate, AccountCUDTO account);
+    AccountEntity update(AccountEntity entity);
 
     Page<AccountEntity> get(Pageable pageable);
 }

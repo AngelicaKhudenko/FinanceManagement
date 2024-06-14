@@ -6,12 +6,11 @@ import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.account_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.account_service.service.audit.enums.ETypeEssence;
-import by.it_academy.jd2.account_service.service.audit.feign.IAuditServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.account_service.service.feign.IUserServiceFeignClient;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +20,15 @@ import java.util.UUID;
 @Component
 public class AccountAuditAspect {
 
-    private final IAuditServiceFeignClient auditServiceFeignClient;
-    private final IUserServiceFeignClient userServiceFeignClient;
+    private final IAuditServiceFeignClient auditFeign;
     private final String createText = "Создание аккаунта";
     private final String getByIdText = "Получение аккаунта по id";
     private final String getAllText = "Получение списка аккаунтов";
     private final String updateText = "Обновление аккаунта";
 
-    public AccountAuditAspect(IAuditServiceFeignClient auditServiceFeignClient,
-                              IUserServiceFeignClient userServiceFeignClient) {
+    public AccountAuditAspect(IAuditServiceFeignClient auditFeign) {
 
-        this.auditServiceFeignClient = auditServiceFeignClient;
-        this.userServiceFeignClient = userServiceFeignClient;
+        this.auditFeign = auditFeign;
     }
 
     @AfterReturning(pointcut ="execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.create(..))", returning = "account")
@@ -42,7 +38,7 @@ public class AccountAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,account.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..))", returning = "account")
@@ -52,7 +48,7 @@ public class AccountAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.getByIdText,userActing,account.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.get(..))", returning="page")
@@ -62,7 +58,7 @@ public class AccountAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.getAllText,userActing, String.valueOf(page.hashCode()));
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.account_service.service.impl.AccountServiceImpl.update(..)) && args(uuid)")
@@ -72,23 +68,16 @@ public class AccountAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.updateText,userActing,uuid.toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     private UserActingDTO getUserActing() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
-        if (userDetails == null) {
-            return null;
-        }
-
-        UserDTO userDTO = userDetails.getUser();
-
-        UserActingDTO userActing = UserActingDTO
+        UserActingDTO user = UserActingDTO
                 .builder()
                 .uuid(userDTO.getUuid())
                 .mail(userDTO.getMail())
@@ -96,7 +85,7 @@ public class AccountAuditAspect {
                 .role(userDTO.getRole())
                 .build();
 
-        return userActing;
+        return user;
     }
 
     private AuditCUDTO getAuditCUDTO(String text, UserActingDTO user, String id) {

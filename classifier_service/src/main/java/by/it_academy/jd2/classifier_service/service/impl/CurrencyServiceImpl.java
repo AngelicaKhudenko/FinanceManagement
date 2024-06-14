@@ -55,7 +55,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         Optional<CurrencyEntity> optional = this.currencyRepository.findById(uuid);
 
         if (optional.isEmpty()){
-            throw new FieldsIncorrectException("uuid","Валюта с таким id отсутствует");
+            throw new FieldsIncorrectException("uuid", "Валюта с таким id отсутствует");
         }
 
         return optional.get();

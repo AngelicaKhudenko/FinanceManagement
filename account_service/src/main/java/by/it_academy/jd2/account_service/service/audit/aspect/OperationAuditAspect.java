@@ -6,7 +6,7 @@ import by.it_academy.jd2.account_service.model.OperationEntity;
 import by.it_academy.jd2.account_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.account_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.account_service.service.audit.enums.ETypeEssence;
-import by.it_academy.jd2.account_service.service.audit.feign.IAuditServiceFeignClient;
+import by.it_academy.jd2.account_service.service.feign.IAuditServiceFeignClient;
 import by.it_academy.jd2.account_service.service.feign.IUserServiceFeignClient;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -77,18 +77,11 @@ public class OperationAuditAspect {
 
     private UserActingDTO getUserActing() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
-        if (userDetails == null) {
-            return null;
-        }
-
-        UserDTO userDTO = userDetails.getUser();
-
-        UserActingDTO userActing = UserActingDTO
+        UserActingDTO user = UserActingDTO
                 .builder()
                 .uuid(userDTO.getUuid())
                 .mail(userDTO.getMail())
@@ -96,7 +89,7 @@ public class OperationAuditAspect {
                 .role(userDTO.getRole())
                 .build();
 
-        return userActing;
+        return user;
     }
 
     private AuditCUDTO getAuditCUDTO(String text, UserActingDTO user, String id) {

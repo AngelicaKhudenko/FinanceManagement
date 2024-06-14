@@ -6,3 +6,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/audit_service
     username: audit_service_app
     password: 12345
+
+url:
+  users: http://user-service:8084/api/v1/users

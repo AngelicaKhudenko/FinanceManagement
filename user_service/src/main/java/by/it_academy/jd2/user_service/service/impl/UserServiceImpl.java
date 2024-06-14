@@ -124,7 +124,7 @@ public class UserServiceImpl implements IUserService {
         entity.setFio(user.getFio());
         entity.setRole(user.getRole());
         entity.setStatus(user.getStatus());
-        entity.setPassword(user.getPassword());
+        entity.setPassword(this.encoder.encode(user.getPassword()));
 
         this.userRepository.saveAndFlush(entity);
     }

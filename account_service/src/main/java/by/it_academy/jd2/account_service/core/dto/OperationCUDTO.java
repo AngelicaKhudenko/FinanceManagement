@@ -1,5 +1,10 @@
 package by.it_academy.jd2.account_service.core.dto;
 
+import by.it_academy.jd2.account_service.controller.utils.LocalDateTimeDeserializer;
+import by.it_academy.jd2.account_service.controller.utils.LocalDateTimeSerializer;
+import by.it_academy.jd2.account_service.controller.utils.UnixTimestampDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OperationCUDTO {
 
-    @NotNull
+    @JsonDeserialize(using = UnixTimestampDeserializer.class)
     private LocalDateTime date;
     @NotEmpty
     @NotNull

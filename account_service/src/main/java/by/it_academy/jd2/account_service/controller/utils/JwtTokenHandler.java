@@ -1,16 +1,22 @@
 package by.it_academy.jd2.account_service.controller.utils;
 
 import by.it_academy.jd2.account_service.config.properties.JWTProperty;
-import by.it_academy.jd2.account_service.core.exceptions.NoTokenException;
+import by.it_academy.jd2.account_service.controller.token.enums.EUserRole;
 import io.jsonwebtoken.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtTokenHandler {
 
     private final JWTProperty property;
+    private final static Logger logger = LogManager.getLogger();
 
     public JwtTokenHandler(JWTProperty property) {
         this.property = property;
@@ -49,11 +55,17 @@ public class JwtTokenHandler {
 
     public boolean validate(String token) {
 
-        if (token == null || token.isBlank() || token.isEmpty()) {
-            throw new NoTokenException();
+        try {
+            Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException ex) {
+            logger.log(Level.WARN, "Ошибка авторизации. Неверный токен", ex);
+        } catch (ExpiredJwtException ex) {
+            logger.log(Level.WARN, "Ошибка авторизации. Токен просрочен",ex);
+        } catch (IllegalArgumentException ex) {
+            logger.log(Level.WARN, "Ошибка авторизации. Строка с токеном пуста",ex);
         }
 
-        Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
-        return true;
+        return false;
     }
 }

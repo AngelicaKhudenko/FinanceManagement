@@ -7,6 +7,7 @@ import by.it_academy.jd2.user_service.service.api.IUserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class AdminSetUp implements CommandLineRunner {
     private final IUserService userService;

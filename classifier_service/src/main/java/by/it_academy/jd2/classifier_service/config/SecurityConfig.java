@@ -45,9 +45,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(requests -> requests
 
                 .requestMatchers(HttpMethod.GET,"/currency","/category").permitAll()
+                .requestMatchers(HttpMethod.GET,"/currency/{uuid}","/category/{uuid}").authenticated()
 
-                .requestMatchers(HttpMethod.POST,"/currency","/category")
-                .hasAnyRole("ADMIN","MANAGER")
+                .requestMatchers(HttpMethod.POST,"/currency","/category").hasAnyRole("ADMIN","MANAGER")
 
                 .anyRequest().authenticated()
         );

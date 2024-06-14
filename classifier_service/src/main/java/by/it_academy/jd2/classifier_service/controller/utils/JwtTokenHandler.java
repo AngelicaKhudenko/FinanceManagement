@@ -1,7 +1,6 @@
 package by.it_academy.jd2.classifier_service.controller.utils;
 
 import by.it_academy.jd2.classifier_service.config.properties.JWTProperty;
-import by.it_academy.jd2.classifier_service.core.exceptions.NoTokenException;
 import io.jsonwebtoken.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

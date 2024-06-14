@@ -23,12 +23,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenHandler jwtHandler;
 
-    private final IUserServiceFeignClient userServiceFeignClient;
+    private final IUserServiceFeignClient userFeign;
 
     public JwtFilter(JwtTokenHandler jwtHandler,
-                     IUserServiceFeignClient userServiceFeignClient) {
+                     IUserServiceFeignClient userFeign) {
         this.jwtHandler = jwtHandler;
-        this.userServiceFeignClient = userServiceFeignClient;
+        this.userFeign = userFeign;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
+        UserDetailsExpanded userDetails = this.userFeign.getUserDetails("Bearer " + token);
 
         if (userDetails == null) {
 
@@ -69,6 +69,8 @@ public class JwtFilter extends OncePerRequestFilter {
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request)
         );
+
+        authentication.setDetails(token);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);

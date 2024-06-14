@@ -38,7 +38,6 @@ public class OperationController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public PageDTO<OperationDTO> get(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                      @RequestParam(value = "size", defaultValue = "20") Integer size) {
 

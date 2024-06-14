@@ -37,7 +37,6 @@ public class UserDetailsExpanded implements UserDetails {
 
         return this.user;
     }
-
     @Override
     public String getPassword() {
 

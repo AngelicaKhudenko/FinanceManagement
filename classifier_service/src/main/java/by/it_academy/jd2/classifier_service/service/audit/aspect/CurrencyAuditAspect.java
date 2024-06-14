@@ -7,11 +7,9 @@ import by.it_academy.jd2.classifier_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.classifier_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.classifier_service.service.audit.enums.ETypeEssence;
 import by.it_academy.jd2.classifier_service.service.feign.IAuditServiceFeignClient;
-import by.it_academy.jd2.classifier_service.service.feign.IUserServiceFeignClient;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -19,16 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrencyAuditAspect {
 
-    private final IAuditServiceFeignClient auditServiceFeignClient;
-    private final IUserServiceFeignClient userServiceFeignClient;
+    private final IAuditServiceFeignClient auditFeign;
     private final String createText = "Создание валюты";
     private final String getAllText = "Получение списка валют";
 
-    public CurrencyAuditAspect(IAuditServiceFeignClient auditServiceFeignClient,
-                               IUserServiceFeignClient userServiceFeignClient) {
+    public CurrencyAuditAspect(IAuditServiceFeignClient auditFeign) {
 
-        this.auditServiceFeignClient = auditServiceFeignClient;
-        this.userServiceFeignClient = userServiceFeignClient;
+        this.auditFeign = auditFeign;
     }
 
     @AfterReturning(pointcut = "execution ( * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.create(..))", returning = "currency")
@@ -38,7 +33,7 @@ public class CurrencyAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,currency.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution ( * by.it_academy.jd2.classifier_service.service.impl.CurrencyServiceImpl.get(..))", returning = "page")
@@ -48,23 +43,20 @@ public class CurrencyAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.getAllText,userActing, String.valueOf(page.hashCode()));
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     private UserActingDTO getUserActing() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
-
-        if (userDetails == null) {
+        if (userDetailsExpanded == null) {
             return null;
         }
 
-        UserDTO userDTO = userDetails.getUser();
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
-        UserActingDTO userActing = UserActingDTO
+        UserActingDTO user = UserActingDTO
                 .builder()
                 .uuid(userDTO.getUuid())
                 .mail(userDTO.getMail())
@@ -72,7 +64,7 @@ public class CurrencyAuditAspect {
                 .role(userDTO.getRole())
                 .build();
 
-        return userActing;
+        return user;
     }
 
     private AuditCUDTO getAuditCUDTO(String text, UserActingDTO user, String id) {

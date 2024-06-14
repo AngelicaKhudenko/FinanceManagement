@@ -1,5 +1,6 @@
 package by.it_academy.jd2.audit_service.controller.http;
 
+import by.it_academy.jd2.audit_service.controller.token.UserDetailsExpanded;
 import by.it_academy.jd2.audit_service.controller.token.dto.UserDTO;
 import by.it_academy.jd2.audit_service.core.dto.AuditCUDTO;
 import by.it_academy.jd2.audit_service.core.dto.AuditDTO;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,14 +25,12 @@ public class AuditController {
 
     private final IAuditService auditService;
     private final ConversionService conversionService;
-    private final IUserServiceFeignClient userServiceFeignClient;
 
     public AuditController(IAuditService auditService,
                            ConversionService conversionService,
                            IUserServiceFeignClient userServiceFeignClient) {
         this.auditService = auditService;
         this.conversionService = conversionService;
-        this.userServiceFeignClient = userServiceFeignClient;
     }
 
     @PostMapping
@@ -71,10 +69,9 @@ public class AuditController {
 
     private UserActingDTO getActingUser (UUID uuid) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDTO userDTO = this.userServiceFeignClient.getUser(uuid, token);
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
         UserActingDTO user = UserActingDTO
                 .builder()

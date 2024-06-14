@@ -9,4 +9,3 @@ app:
     secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
     issuer: ITAcademy
 
-urlUserService: http://user-service:8080/users

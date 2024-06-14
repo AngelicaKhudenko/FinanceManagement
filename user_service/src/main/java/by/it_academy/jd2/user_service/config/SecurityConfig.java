@@ -44,7 +44,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
 
+                .requestMatchers("/users/details").authenticated()
                 .requestMatchers("/users/**").hasAnyRole("ADMIN")
+
                 .requestMatchers("/cabinet/me").authenticated()
 
                 .requestMatchers("/cabinet/registration","/cabinet/verification","/cabinet/login").permitAll()

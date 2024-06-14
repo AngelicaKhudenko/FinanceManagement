@@ -1,9 +1,10 @@
 package by.it_academy.jd2.account_service.service.impl;
 
+import by.it_academy.jd2.account_service.controller.token.UserDetailsExpanded;
+import by.it_academy.jd2.account_service.controller.utils.JwtTokenHandler;
 import by.it_academy.jd2.account_service.core.dto.CurrencyDTO;
 import by.it_academy.jd2.account_service.core.enums.EAccountType;
 import by.it_academy.jd2.account_service.core.exceptions.FieldsIncorrectException;
-import by.it_academy.jd2.account_service.service.feign.ICabinetServiceFeignClient;
 import by.it_academy.jd2.account_service.service.feign.ICurrencyServiceFeignClient;
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.repository.IAccountRepository;
@@ -31,20 +32,17 @@ public class AccountServiceImpl implements IAccountService {
 
     private final ConversionService conversionService;
     private final IAccountRepository accountRepository;
-
+    private final JwtTokenHandler tokenHandler;
     private final ICurrencyServiceFeignClient currencyServiceFeignClient;
 
-    private final ICabinetServiceFeignClient cabinetServiceFeignClient;
-
     public AccountServiceImpl(ConversionService conversionService,
-                              IAccountRepository accountRepository,
-                              ICurrencyServiceFeignClient currencyServiceFeignClient,
-                              ICabinetServiceFeignClient cabinetServiceFeignClient) {
+                              IAccountRepository accountRepository, JwtTokenHandler tokenHandler,
+                              ICurrencyServiceFeignClient currencyServiceFeignClient) {
 
         this.conversionService = conversionService;
         this.accountRepository = accountRepository;
+        this.tokenHandler = tokenHandler;
         this.currencyServiceFeignClient = currencyServiceFeignClient;
-        this.cabinetServiceFeignClient = cabinetServiceFeignClient;
     }
 
     @Transactional
@@ -52,18 +50,22 @@ public class AccountServiceImpl implements IAccountService {
     public AccountEntity create(AccountCUDTO account) {
 
         if (EAccountType.getByName(account.getType().name()).isEmpty()) {
-            throw new FieldsIncorrectException("type","Переданы некорректные значения констант");
+            throw new FieldsIncorrectException("type", "Переданы некорректные значения констант");
         }
 
         UUID currency = account.getCurrency();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        String token = null;
+
+        if (authentication != null && authentication.getDetails() instanceof String) {
+            token = (String) authentication.getDetails();
+        }
 
         CurrencyDTO currencyDTO = this.currencyServiceFeignClient.get("Bearer " + token, currency);
 
         if (currencyDTO == null) {
-            throw new IllegalStateException("Ошибка при обработке токена");
+            throw new FieldsIncorrectException("currency","Ошибка при указании валюты");
         }
 
         AccountEntity entity = this.conversionService.convert(account, AccountEntity.class);
@@ -139,12 +141,31 @@ public class AccountServiceImpl implements IAccountService {
         return entity;
     }
 
+    @Transactional
+    @Override
+    public AccountEntity update(AccountEntity entity) {
+
+        Optional<AccountEntity> optional = this.accountRepository.findById(entity.getUuid());
+
+        if (optional.isEmpty()) {
+            throw new FieldsIncorrectException("uuid","Пользователь с таким id не зарегистрирвоан");
+        }
+
+        AccountEntity entityDB = optional.get();
+
+        if (!entityDB.getUpdate().equals(entity.getUpdate())) {
+            throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
+        }
+
+        this.accountRepository.saveAndFlush(entity);
+        return entityDB;
+    }
+
     private UserDTO getUserByToken () {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDTO userDTO = this.cabinetServiceFeignClient.getUser("Bearer " + token);
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
         if (userDTO == null) {
             throw new IllegalStateException("Ошибка при обработке токена");

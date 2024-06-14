@@ -19,7 +19,7 @@ import java.util.Optional;
 @Component
 public class CabinetAuditAspect {
 
-    private final IAuditServiceFeignClient auditServiceFeignClient;
+    private final IAuditServiceFeignClient auditFeign;
     private final UserHolder userHolder;
     private final IUserService userService;
     private final String createText = "Регистрация пользователя";
@@ -27,10 +27,10 @@ public class CabinetAuditAspect {
     private final String loginText = "Вход пользователя в приложение";
     private final String getOnMeText = "Получение пользователем информации о себе";
 
-    public CabinetAuditAspect(IAuditServiceFeignClient auditServiceFeignClient,
+    public CabinetAuditAspect(IAuditServiceFeignClient auditFeign,
                               UserHolder userHolder, IUserService userService) {
 
-        this.auditServiceFeignClient = auditServiceFeignClient;
+        this.auditFeign = auditFeign;
         this.userHolder = userHolder;
         this.userService = userService;
     }
@@ -42,7 +42,7 @@ public class CabinetAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,entity.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.verify(..))", returning = "entity")
@@ -52,7 +52,7 @@ public class CabinetAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.verifyText,userActing,entity.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.login(..)) && args(loginDTO)")
@@ -69,7 +69,7 @@ public class CabinetAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.loginText,userActing,user.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.user_service.service.impl.CabinetServiceImpl.getInfoAboutMe(..))", returning = "user")
@@ -79,7 +79,7 @@ public class CabinetAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.getOnMeText,userActing,user.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     private UserActingDTO getUserActing() {

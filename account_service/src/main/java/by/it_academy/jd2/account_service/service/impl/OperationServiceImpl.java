@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,20 +34,20 @@ public class OperationServiceImpl implements IOperationService {
     private final ConversionService conversionService;
     private final IOperationRepository operationRepository;
     private final IAccountService accountService;
-    private final ICurrencyServiceFeignClient currencyServiceFeignClient;
-    private final ICategoryServiceFeignClient categoryServiceFeignClient;
+    private final ICurrencyServiceFeignClient currencyFeign;
+    private final ICategoryServiceFeignClient categoryFeign;
 
     public OperationServiceImpl(ConversionService conversionService,
                                 IOperationRepository operationRepository,
                                 IAccountService accountService,
-                                ICurrencyServiceFeignClient currencyServiceFeignClient,
-                                ICategoryServiceFeignClient categoryServiceFeignClient) {
+                                ICurrencyServiceFeignClient currencyFeign,
+                                ICategoryServiceFeignClient categoryFeign) {
 
         this.conversionService = conversionService;
         this.operationRepository = operationRepository;
         this.accountService = accountService;
-        this.currencyServiceFeignClient = currencyServiceFeignClient;
-        this.categoryServiceFeignClient = categoryServiceFeignClient;
+        this.currencyFeign = currencyFeign;
+        this.categoryFeign = categoryFeign;
     }
 
     @Override
@@ -59,10 +60,14 @@ public class OperationServiceImpl implements IOperationService {
         UUID category = operation.getCategory();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        String token = null;
 
-        CurrencyDTO currencyDTO = this.currencyServiceFeignClient.get("Bearer " + token, currency);
-        CategoryDTO categoryDTO = this.categoryServiceFeignClient.get("Bearer " + token, category);
+        if (authentication != null && authentication.getDetails() instanceof String) {
+            token = (String) authentication.getDetails();
+        }
+
+        CurrencyDTO currencyDTO = this.currencyFeign.get("Bearer " + token, currency);
+        CategoryDTO categoryDTO = this.categoryFeign.get("Bearer " + token, category);
 
         if (currencyDTO == null || categoryDTO == null) {
             throw new IllegalStateException("Ошибка при обработке токена");
@@ -76,6 +81,13 @@ public class OperationServiceImpl implements IOperationService {
 
         LocalDateTime creation = LocalDateTime.now();
         entity.setCreation(creation);
+
+        AccountEntity account = this.accountService.get(uuid);
+        double balance = account.getBalance();
+        balance += operation.getValue();
+        account.setBalance(balance);
+
+        this.accountService.update(account);
 
         return this.operationRepository.saveAndFlush(entity);
     }
@@ -105,6 +117,18 @@ public class OperationServiceImpl implements IOperationService {
             throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
         }
 
+        if (!Objects.equals(operation.getValue(), operationCUDTO.getValue())) {
+
+            double difference = operation.getValue() - operationCUDTO.getValue();
+
+            AccountEntity account = this.accountService.get(uuid);
+            double balance = account.getBalance();
+            balance += difference;
+            account.setBalance(balance);
+
+            this.accountService.update(account);
+        }
+
         operation.setDescription(operationCUDTO.getDescription());
         operation.setCategory(operationCUDTO.getCategory());
         operation.setValue(operationCUDTO.getValue());
@@ -131,6 +155,13 @@ public class OperationServiceImpl implements IOperationService {
         if (!operation.getUpdate().equals(updateDateLocal)) {
             throw new OptimisticLockException("Несоответствие версий. Данные были обновлены другим пользователем");
         }
+
+        AccountEntity account = this.accountService.get(uuid);
+        double balance = account.getBalance();
+        balance -= operation.getValue();
+        account.setBalance(balance);
+
+        this.accountService.update(account);
 
         this.operationRepository.delete(operation);
     }

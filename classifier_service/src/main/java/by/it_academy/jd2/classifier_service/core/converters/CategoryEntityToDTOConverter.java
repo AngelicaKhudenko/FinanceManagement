@@ -1,4 +1,4 @@
-package by.it_academy.jd2.classifier_service.controller.converter;
+package by.it_academy.jd2.classifier_service.core.converters;
 
 import by.it_academy.jd2.classifier_service.core.dto.CategoryDTO;
 import by.it_academy.jd2.classifier_service.model.CategoryEntity;

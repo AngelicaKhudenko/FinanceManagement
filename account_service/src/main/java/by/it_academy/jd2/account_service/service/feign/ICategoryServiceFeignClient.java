@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "classifierService", url = "${urlCategoryService}")
+@FeignClient(name = "classifierService", url = "${url.category}")
 public interface ICategoryServiceFeignClient {
 
     @GetMapping("/{uuid}")

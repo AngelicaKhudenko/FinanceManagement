@@ -8,11 +8,9 @@ import by.it_academy.jd2.classifier_service.service.audit.dto.AuditCUDTO;
 import by.it_academy.jd2.classifier_service.service.audit.dto.UserActingDTO;
 import by.it_academy.jd2.classifier_service.service.audit.enums.ETypeEssence;
 import by.it_academy.jd2.classifier_service.service.feign.IAuditServiceFeignClient;
-import by.it_academy.jd2.classifier_service.service.feign.IUserServiceFeignClient;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -20,16 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryAuditAspect {
 
-    private final IAuditServiceFeignClient auditServiceFeignClient;
-    private final IUserServiceFeignClient userServiceFeignClient;
+    private final IAuditServiceFeignClient auditFeign;
     private final String createText = "Создание категории";
     private final String getAllText = "Получение списка категорий";
 
-    public CategoryAuditAspect(IAuditServiceFeignClient auditServiceFeignClient,
-                               IUserServiceFeignClient userServiceFeignClient) {
+    public CategoryAuditAspect(IAuditServiceFeignClient auditFeign) {
 
-        this.auditServiceFeignClient = auditServiceFeignClient;
-        this.userServiceFeignClient = userServiceFeignClient;
+        this.auditFeign = auditFeign;
     }
 
     @AfterReturning(pointcut = "execution( * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.create(..))",returning = "category")
@@ -39,7 +34,7 @@ public class CategoryAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.createText,userActing,category.getUuid().toString());
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     @AfterReturning(value = "execution( * by.it_academy.jd2.classifier_service.service.impl.CategoryServiceImpl.get(..))", returning = "page")
@@ -49,23 +44,20 @@ public class CategoryAuditAspect {
 
         AuditCUDTO audit = getAuditCUDTO(this.getAllText,userActing, String.valueOf(page.hashCode()));
 
-        this.auditServiceFeignClient.create(audit);
+        this.auditFeign.create(audit);
     }
 
     private UserActingDTO getUserActing() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
+        UserDetailsExpanded userDetailsExpanded = (UserDetailsExpanded) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetailsExpanded userDetails = this.userServiceFeignClient.getUserDetails("Bearer " + token);
-
-        if (userDetails == null) {
+        if (userDetailsExpanded == null) {
             return null;
         }
 
-        UserDTO userDTO = userDetails.getUser();
+        UserDTO userDTO = userDetailsExpanded.getUser();
 
-        UserActingDTO userActing = UserActingDTO
+        UserActingDTO user = UserActingDTO
                 .builder()
                 .uuid(userDTO.getUuid())
                 .mail(userDTO.getMail())
@@ -73,7 +65,7 @@ public class CategoryAuditAspect {
                 .role(userDTO.getRole())
                 .build();
 
-        return userActing;
+        return user;
     }
 
     private AuditCUDTO getAuditCUDTO(String text, UserActingDTO user, String id) {

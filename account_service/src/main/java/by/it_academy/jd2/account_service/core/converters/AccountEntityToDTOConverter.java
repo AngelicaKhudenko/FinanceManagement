@@ -1,4 +1,4 @@
-package by.it_academy.jd2.account_service.controller.converter;
+package by.it_academy.jd2.account_service.core.converters;
 
 import by.it_academy.jd2.account_service.model.AccountEntity;
 import by.it_academy.jd2.account_service.core.dto.AccountDTO;

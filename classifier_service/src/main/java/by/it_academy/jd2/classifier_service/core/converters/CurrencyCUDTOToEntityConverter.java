@@ -1,4 +1,4 @@
-package by.it_academy.jd2.classifier_service.service.converter;
+package by.it_academy.jd2.classifier_service.core.converters;
 
 import by.it_academy.jd2.classifier_service.core.dto.CurrencyCUDTO;
 import by.it_academy.jd2.classifier_service.model.CurrencyEntity;

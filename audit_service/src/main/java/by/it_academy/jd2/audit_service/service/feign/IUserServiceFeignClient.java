@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "userService", url = "${urlUserService}")
+@FeignClient(name = "userService", url = "${url.users}")
 public interface IUserServiceFeignClient {
 
     @GetMapping("/details")
     UserDetailsExpanded getUserDetails(@RequestHeader("Authorization") String authorization);
-
-    @GetMapping("/{uuid}")
-    UserDTO getUser(@PathVariable(value = "uuid")UUID uuid, @RequestHeader("Authorization") String authorization);
 }
